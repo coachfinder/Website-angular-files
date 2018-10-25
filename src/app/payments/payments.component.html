@@ -1,0 +1,112 @@
+<div class="container-fulid section-cta">
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row">
+          <h2 class="cta-title">Payment</h2>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="container-fulid section-summary">
+  <div class="container">
+    <label>1. Booking Summary   </label><label class="active"> 2. Payment</label>
+  </div>
+  <div class="container total_payment">
+    <p>Private Hire Total:  {{price_data.total | currency:'GBP'}}</p>
+    <label>Amount to be paid: <span>  {{price_data.amount_to_be_paid | currency:'GBP'}}</span></label>
+  </div>
+</div>
+
+   <div class="container-fulid sec_payment">
+    <div class="container">
+      <div class="payment_form" >
+        <h2>Payment details</h2>
+        <form>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Customer Name</label>
+                <div class="form-fields">
+                  <input class="form-control loc" id="text21" type="text">
+                  <!-- <span class="error_msg">Please complete location</span> -->
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Customer Email</label>
+                <div class="form-fields">
+                <input class="form-control loc" id="text22" type="text">
+                <!-- <span class="error_msg">Please complete destination</span> -->
+              </div>	
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Billing First Name</label>
+                <div class="form-fields">
+                  <input class="form-control loc" id="text23" type="text">
+                  <!-- <span class="error_msg">Please complete location</span> -->
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Billing Last Name</label>
+                <div class="form-fields">
+                <input class="form-control loc" id="text24" type="text">
+                <!-- <span class="error_msg">Please complete destination</span> -->
+              </div>	
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Billing Address 1</label>
+                <div class="form-fields">
+                  <input class="form-control loc" id="text25" type="text">
+                  <!-- <span class="error_msg">Please complete location</span> -->
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Billing Address 2</label>
+                <div class="form-fields">
+                <input class="form-control loc" id="text26" type="text">
+                <!-- <span class="error_msg">Please complete destination</span> -->
+              </div>	
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Billing City</label>
+                <div class="form-fields">
+                  <input class="form-control loc" id="text27" type="text">
+                  <!-- <span class="error_msg">Please complete location</span> -->
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group full">
+                <label>Billing Postcode</label>
+                <div class="form-fields">
+                <input class="form-control loc" id="text28" type="text">
+                <!-- <span class="error_msg">Please complete destination</span> -->
+              </div>	
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-lg-6 form-group full">
+                <label>Billing Country</label>
+                <div class="form-fields">
+                  <input class="form-control loc" id="text29" type="text">
+                  <!-- <span class="error_msg">Please complete location</span> -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-lg-6 form-group full">
+                <a (click)="back()" class="r-more back_btn">back</a>
+              </div>
+            <div class="col-xs-12 col-md-6 col-lg-6 form-group full">
+               <div id="paypal-button"></div>
+                <!--<a href="javascript:void(0)" class="r-more pay_btn">PAy now</a>-->
+              </div>
+
+        </div>
+      </form>
+      </div>	
+    </div>
+  </div>
+  

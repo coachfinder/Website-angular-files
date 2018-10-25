@@ -1,0 +1,39 @@
+<div class="container-fulid section-contact" >
+   
+    <p-growl [(value)]="msgs"></p-growl>
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row">
+          <h2 class="cta-title-signup">With our website launch just around the corner, sign up to be the first to hear about our outlandish attraction packages, traveltastic promotions and much more!</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row">
+          <form class="contact_form"  [formGroup]="rform" (ngSubmit)="contactUs()">
+            <div class="form-group firstst">
+                <div class="form-fields ">
+                  <input class="form-control loc" id="text1" placeholder="Your Name" type="text" formControlName="Name">
+                  <control-msg  class="error_msg contactMsg"  [control]="rform.controls.Name"></control-msg >
+                  <!-- <span class="error_msg" *ngIf="!rform.controls['Name'].valid && rform.controls['Name'].touched">This field is required</span> -->
+
+                </div>
+              </div>
+              <div class="form-group firstst">
+                <div class="form-fields " >
+                <input class="form-control loc" id="text2" placeholder="Email" type="text" formControlName="email">
+                <control-msg  class="error_msg contactMsg"  [control]="rform.controls.email"></control-msg>
+                <!-- <span class="error_msg" *ngIf="!rform.controls['email'].valid && rform.controls['email'].touched">This field is required</span> -->
+
+              </div>
+              </div>
+              <button type="submit" class="btn btn-searchs" [disabled]="!rform.valid ? 'disabled' : ''" >Submit</button>
+                
+            </form>
+        </div>
+    </div>
+      </div>
+  
+ 	

@@ -1,0 +1,341 @@
+<div class="container-fulid section-cta" #chckWidth>
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title">{{pageContent.title}}</h2>
+        <p><strong>{{pageContent.heading}} </strong><br> {{pageContent.sub_heading}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="visible ;then firstTemplate else secondTemplate " class="container_custom"> </div>
+
+<ng-template #firstTemplate>
+  <div class="container-fulid section-value">
+    <div class="container">
+      <div class="col-xs-12">
+        <ul class="nav nav-tabs responsive-tabs">
+          <div *ngFor="let section of pageContent.section;let i=index">
+            <li id="li_{{i}}" [ngClass]="i==0 ? ' col-xs-12 col-sm-3 col-md-3 col-lg-3 mainli active':'col-xs-12 col-sm-3 col-md-3 col-lg-3 mainli'">
+              <a (click)="faqAbout(i)">
+                <div class="bg_icons">
+                  <img src={{section.file}} class="img-reliable" alt="">
+                </div>
+                <p [innerHTML]="section.title"></p>
+              </a>
+            </li>
+          </div>
+
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="home1">
+
+            <div class="faq_sec">
+              <a (click)="showHide()" class="openall" id="Payment" data-text-swap="Close all" data-text-original="Open all">{{textValue}}</a>
+              <div class="panel-group" id="accordion">
+                <div class="panel panel-default" *ngFor="let question of faq let i = index">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" [ngClass]="!selectedQ[i] && 'collapsed'" (click)="changeMe(i)">{{question.question}}</a>
+                    </h4>
+                  </div>
+                  <div *ngIf="selectedQ[i]" id="collapse1" class="panel-collapse Payment collapse in">
+                    <div class="panel-body" [innerHTML]="question.answer">
+                      <p class="answerA" style="left: 0;
+    top: 0px;
+    font-weight: 900;
+    color: #f36;
+    padding-right: 5px;
+    font-size: 24px;">A.</p>
+                      <p> {{question.answer}}</p>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ngIf start -->
+<ng-template #secondTemplate>
+
+  <div class="container-fulid section-value">
+    <div class="container">
+      <div class="col-xs-12">
+        <ul class="nav nav-tabs responsive-tabs">
+          <div *ngFor="let section of pageContent.section; let i=index">
+            <li style=" margin: 3px; cursor : pointer " class="col-xs-12 col-sm-3 col-md-3 col-lg-3 mainli" id="li_{{i}}" [ngClass]="i==0 ? ' active':''" (click)="faqAbout1(i)">
+              <a (click)="faqAbout1(i)">
+                <div class="bg_icons">
+                  <img src={{section.file}} class="img-reliable" alt="">
+                </div>
+                <p [innerHTML]="returnTitle(section.title)"> {{section.title | replaceLineBreaks }} </p>
+              </a>
+            </li>
+
+            <div class="tab-content">
+              <div class="tab-pane active" id="home1">
+                <div *ngIf="shown[i]">
+
+                  <div class="faq_sec">
+                    <a (click)="showHide()" class="openall" id="Payment" data-text-swap="Close all" data-text-original="Open all">{{textValue}}</a>
+                    <div class="panel-group" id="accordion">
+                      <div class="panel panel-default" *ngFor="let question of faq let i = index">
+
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" [ngClass]="!selectedQ[i] && 'collapsed'" (click)="changeMe(i)">{{question.question}}</a>
+                          </h4>
+                        </div>
+                        <div id="collapse1" class="panel-collapse Payment collapse in">
+                          <div *ngIf="selectedQ[i]" class="panel-body" [innerHTML]="question.answer">
+                            <p>{{question.answer}}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- ngIf endd -->
+<!-- 
+<div class="tab-pane" id="profile1">
+<div class="faq_sec">
+<a href="javascript:void(0)" class="openall" id="Service" data-text-swap="Close all" data-text-original="Open all" >Open all</a>
+<div class="panel-group" id="accordion">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse7">Do you require a deposit?</a>
+    </h4>
+  </div>
+  <div id="collapse7" class="panel-collapse Service collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse8">How can I pay for my booking?</a>
+    </h4>
+  </div>
+  <div id="collapse8" class="panel-collapse Service collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse9">Lorem ipsum dolor sit amet, consectetur adipiscing elit?</a>
+    </h4>
+  </div>
+  <div id="collapse9" class="panel-collapse Service collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse10">Nullam pretium posuere eleifend?</a>
+    </h4>
+  </div>
+  <div id="collapse10" class="panel-collapse Service collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse11">Praesent efficitur diam lacinia nulla luctus, a condimentum erat scelerisque?</a>
+    </h4>
+  </div>
+  <div id="collapse11" class="panel-collapse Service collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse12">If I have selected additional extras i.e. Hotel rooms or ferry crossings, will I be charged for these separately?</a>
+    </h4>
+  </div>
+  <div id="collapse12" class="panel-collapse Service collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+</div> 
+</div>
+</div>
+<div class="tab-pane" id="profile2">
+<div class="faq_sec">
+<a href="javascript:void(0)" class="openall" id="Coach" data-text-swap="Close all" data-text-original="Open all" >Open all</a>
+<div class="panel-group" id="accordion">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse13">How can I pay for my booking?</a>
+    </h4>
+  </div>
+  <div id="collapse13" class="panel-collapse Coach collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse14">Do you require a deposit?</a>
+    </h4>
+  </div>
+  <div id="collapse14" class="panel-collapse Coach collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse15">Lorem ipsum dolor sit amet, consectetur adipiscing elit?</a>
+    </h4>
+  </div>
+  <div id="collapse15" class="panel-collapse Coach collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse16">Nullam pretium posuere eleifend?</a>
+    </h4>
+  </div>
+  <div id="collapse16" class="panel-collapse Coach collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse17">Praesent efficitur diam lacinia nulla luctus, a condimentum erat scelerisque?</a>
+    </h4>
+  </div>
+  <div id="collapse17" class="panel-collapse Coach collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse18">If I have selected additional extras i.e. Hotel rooms or ferry crossings, will I be charged for these separately?</a>
+    </h4>
+  </div>
+  <div id="collapse18" class="panel-collapse Coach collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+</div> 
+</div>
+</div>
+<div class="tab-pane" id="profile3">
+<div class="faq_sec">
+<a href="javascript:void(0)" class="openall" id="tickets" data-text-swap="Close all" data-text-original="Open all" >Open all</a>
+<div class="panel-group" id="accordion">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+
+      
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse19">Do you require a deposit?</a>
+    </h4>
+  </div>
+  <div id="collapse19" class="panel-collapse tickets collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse20">How can I pay for my booking?</a>
+    </h4>
+  </div>
+  <div id="collapse20" class="panel-collapse tickets collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse21">Lorem ipsum dolor sit amet, consectetur adipiscing elit?</a>
+    </h4>
+  </div>
+  <div id="collapse21" class="panel-collapse tickets collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse22">Nullam pretium posuere eleifend?</a>
+    </h4>
+  </div>
+  <div id="collapse22" class="panel-collapse tickets collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse23">Praesent efficitur diam lacinia nulla luctus, a condimentum erat scelerisque?</a>
+    </h4>
+  </div>
+  <div id="collapse23" class="panel-collapse tickets collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse24">If I have selected additional extras i.e. Hotel rooms or ferry crossings, will I be charged for these separately?</a>
+    </h4>
+  </div>
+  <div id="collapse24" class="panel-collapse tickets collapse">
+    <div class="panel-body"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet dui id orci ornare tincidunt. Morbi quis arcu et elit vestibulum ullamcorper vel sit amet urna. Quisque gravida ante egestas augue porttitor aliquam. Aenean dui nulla, semper et felis non, mattis faucibus eros. Morbi eu sapien nibh. Praesent maximus, sem vitae bibendum semper, dolor leo vestibulum magna, non commodo enim libero in neque. Quisque nec accumsan nunc, in semper justo. Vestibulum sed magna malesuada, tincidunt mauris vitae, eleifend ex. Nam at tellus at nisi scelerisque placerat in eget ipsum. Nunc semper lectus sem, id blandit nulla lobortis malesuada. Ut quis tristique augue, ut euismod mi.</p> </div>
+  </div>
+</div>
+</div> 
+</div>
+</div>
+</div> -->
+
+<!-- <div class="row safe-reliable-text">
+        <div class="col-xs-12 col-sm-5 col-sm-offset-1 col-md-5 col-md-offset-1  col-lg-5 col-lg-offset-1 ">
+          <div class="bg_icons">
+            <img src="images/value_iconw.png" class="img-reliable" alt="">
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <h2 class="title-sub text-left">Value</h2>
+          <p class="text-left">Our professional team compares the market and our network of <b>over 7,000 audited operators</b> to get you <b>the best value coach hire</b> solution for your money.</p>
+      
+        </div>
+      </div> -->
+<!-- </div> -->

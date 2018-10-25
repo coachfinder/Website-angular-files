@@ -1,0 +1,84 @@
+<div class="container-fulid section-contact" >
+   
+    <p-growl [(value)]="msgs"></p-growl>
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row">
+          <h2 class="cta-title-contact" [innerHTML]="pageContent.heading"></h2>
+          <h3  [innerHTML]="pageContent.sub_heading"></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+   <div class="container-fulid ">
+    <div class="container section-address">
+      <div class="section-addressL">
+        <img src="assets/images/coachfinderlogonew.png" width="202" height="67" >
+        <p [innerHTML]="pageContent.address"></p>
+
+        <ul>
+          <li> <span class="icon_bg"> <img src="assets/images/book_icon.png" width="43" height="43"></span><p><a href="tel:0371 979 7979">{{pageContent.phone}}</a><br><a href="mailto:{{pageContent.email}}">{{pageContent.email}}</a></p></li>
+        </ul>
+      </div>	
+      <div class="section-addressR">
+        <p  [innerHTML]="pageContent.right_heading"></p>
+        <ul>
+          <li> <span class="icon_bg" style="cursor: pointer;"> <img (click)="navigateToFaq(0)" src="assets/images/card_icon.png" width="49" height="40"></span><p><a (click)="navigateToFaq(0)" style="cursor: pointer;"> Payment</a></p></li>
+          <li> <span class="icon_bg" style="cursor: pointer;"> <img (click)="navigateToFaq(2)" src="assets/images/bus_icon_c.png" width="49" height="42"></span><p><a (click)="navigateToFaq(2)" style="cursor: pointer;"> Coach <br>Specification</a></p></li>
+          <li> <span class="icon_bg" style="cursor: pointer;"> <img (click)="navigateToFaq(1)" src="assets/images/service_icon.png" width="36" height="47"></span><p><a (click)="navigateToFaq(1)" style="cursor: pointer;"> Service</a></p></li>
+          <li> <span class="icon_bg" style="cursor: pointer;"> <img (click)="navigateToFaq(3)" src="assets/images/ticket_icon.png" width="51" height="50"></span><p><a (click)="navigateToFaq(3)" style="cursor: pointer;"> Tickets & <br> Attractions</a></p></li>
+        </ul>
+      </div>	
+    </div>
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row">
+          <h2 class="form-title">Get in touch</h2>
+          <form  (keydown.enter)="$event.preventDefault()" class="contact_form"  [formGroup]="rform" (ngSubmit)="contactUs()">
+            <div class="form-group firstst">
+                <div class="form-fields ">
+                  <input class="form-control loc" id="text1" placeholder="Your Name" type="text" formControlName="Name">
+                  <control-msg  class="error_msg contactMsg"  [control]="rform.controls.Name"></control-msg >
+                  <!-- <span class="error_msg" *ngIf="!rform.controls['Name'].valid && rform.controls['Name'].touched">This field is required</span> -->
+
+                </div>
+              </div>
+              <div class="form-group firstst">
+                <div class="form-fields " >
+                <input class="form-control loc" id="text2" placeholder="Email" type="text" formControlName="email">
+                <control-msg  class="error_msg contactMsg"  [control]="rform.controls.email"></control-msg>
+                <!-- <span class="error_msg" *ngIf="!rform.controls['email'].valid && rform.controls['email'].touched">This field is required</span> -->
+
+              </div>
+              </div>
+                <div class="form-group secnd">
+                <div class="form-fields" >
+                <input class="form-control pass" id="text3" placeholder="Phone Number" type="text" formControlName="phnumber">
+                <control-msg class="error_msg contactMsg"  [control]="rform.controls.phnumber"></control-msg>
+                <!-- <span class="error_msg" *ngIf="!rform.controls['phnumber'].valid && rform.controls['phnumber'].touched">This field is required</span> -->
+
+              </div>
+              </div>
+            
+                <div class="form-group full thrd">
+                <div class="form-fields">
+                <textarea name="comment" form="usrform" placeholder="Your message" formControlName="message" ></textarea>
+                <span class="error_msg contactMsg" *ngIf="!rform.controls['message'].valid && rform.controls['message'].touched">This field is required</span>
+                </div>
+
+              </div>
+              <button type="submit" class="btn btn-search" [disabled]="!rform.valid ? 'disabled' : ''" >Submit</button>
+                
+            </form>
+        </div></div>
+      </div>
+    </div>
+  <div class="container-fulid section-map">
+    <div class="container">
+      <div class="row img_sec">
+        <div class="col-lg-12 map-contact">
+           <h3 class="map-title">Our location</h3>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2430.2037402961523!2d-1.8906411841942083!3d52.475446679805756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4870bc876c7b5c03%3A0x926a133a796eed9b!2sNational+Express+House%2C+Birmingham%2C+UK!5e0!3m2!1sen!2sin!4v1521458631486" width="100%"  frameborder="0" style="border:0" allowfullscreen></iframe></div>
+      </div>
+    </div>
+  </div>	

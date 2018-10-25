@@ -1,0 +1,158 @@
+<div class="container-fulid section-cta">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title">{{pageContent.title}}</h2>
+        <p [innerHTML]="pageContent.subtitle"></p>
+      </div>
+    </div>
+    <div class="cta-boxes">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <p [innerHTML]="pageContent.left_desc"></p>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <p [innerHTML]="pageContent.right_desc"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fulid section-sports">
+  <div class="container">
+    <div class="row img_sec">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <img src={{pageContent.file1}} class="img-reliable" alt="">
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <img src={{pageContent.file2}} class="img-reliable" alt="">
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <img src={{pageContent.file3}} class="img-reliable" alt="">
+      </div>
+    </div>
+    <p [innerHTML]="pageContent.content"></p>
+    <p style="padding: 0px; margin: 0px;"><a routerLink="/" class="r-more">{{pageContent.quote_text}}</a></p>
+
+  </div>
+</div>
+<div class="container">
+  <div class="col-xs-12">
+    <div class="row safe-reliable-text_new">
+      <p>From journeys through time at the famous London Dungeons, to underwater biological explorations at Sea Life.<br> Or
+        if youalready have a destination in mind, fill in the quote form and start your journey to unforgettable school<br>        trips and coach hire today!</p>
+    </div>
+  </div>
+</div>
+
+<!-- sections starts here -->
+<div *ngFor="let section of pageContent.sections; let i = index;">
+  <div id="check{{i}}" [ngClass]="planClicked ? 'container-fulid section-value_sec ThorpePark without_after':'container-fulid section-value_sec ThorpePark'"
+    *ngIf="i%2==0" [ngStyle]="{'background-color': section.color_code}">
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row safe-reliable-text_sec">
+          <div class="section-booking_text">
+            <h2 class="title-sub text-left">{{section.title}}</h2>
+            <p class="text-left" [innerHTML]="section.description"></p>
+
+          </div>
+          <div class="section-booking_img text-center">
+            <img src={{section.file}} class="img-reliable img-responsive" alt="">
+          </div>
+        </div>
+        <div class="learn_more_btn row row" id="thor_more_{{i}}">
+          <a (click)="show(i)">Learn more</a>
+        </div>
+      </div>
+    </div>
+    <div class="attrcat_more" style="display: none;" id="thor_sec_{{i}}">
+      <div class="container">
+        <h2>{{pageContent.dis_title}}</h2>
+        <h3>{{pageContent.dis_subtitle}}</h3>
+        <h5>Tickets and Travel</h5>
+        <div class="row reliable-text">
+
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="section.option_1_price != '0'">
+            <h2>{{section.option_1_title}}</h2>
+            <span>£{{section.option_1_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_1_button}}</a>
+
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="section.option_2_price != '0'">
+            <h2>{{section.option_2_title}}</h2>
+            <span>£{{section.option_2_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_2_button}}</a>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="section.option_3_price != '0'">
+            <h2>{{section.option_3_title}}</h2>
+            <span>£{{section.option_3_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_3_button}}</a>
+
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="section.option_4_price != '0'">
+            <h2>{{section.option_4_title}}</h2>
+            <span>£{{section.option_4_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_4_button}}</a>
+          </div>
+        </div>
+        <p>{{pageContent.dis_details}}</p>
+
+      </div>
+      <a class="close_btn" (click)="hide(i)">Close</a>
+    </div>
+
+  </div>
+  <div class="container-fulid section-booking" id="section-booking" id="check{{i}}" *ngIf="i%2!=0" [ngStyle]="{'background-color': section.color_code}">
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row safe-reliable-text_sec">
+          <div class="section-booking_img text-center">
+            <img src={{section.file}} class="img-reliable img-responsive" alt="">
+          </div>
+          <div class="section-booking_text">
+            <h2 class="title-sub text-left">{{section.title}}</h2>
+            <p class="text-left" [innerHTML]="section.description"></p>
+
+          </div>
+        </div>
+        <div class="learn_more_btn row" id="thor_more_{{i}}">
+          <a (click)="show(i)">Learn more</a>
+        </div>
+      </div>
+    </div>
+    <div class="attrcat_more attrcat2" style="display: none;" id="thor_sec_{{i}}">
+      <div class="container">
+        <h2>{{pageContent.dis_title}}</h2>
+        <h3>{{pageContent.dis_subtitle}}</h3>
+        <h5>Tickets and Travel</h5>
+        <div class="row reliable-text">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="section.option_1_price != '0'">
+            <h2>{{section.option_1_title}}</h2>
+            <span>£{{section.option_1_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_1_button}}</a>
+
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="section.option_2_price != '0'">
+            <h2>{{section.option_2_title}}</h2>
+            <span>£{{section.option_2_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_2_button}}</a>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="section.option_3_price != '0'">
+            <h2>{{section.option_3_title}}</h2>
+            <span>£{{section.option_3_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_3_button}}</a>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="section.option_4_price != '0'">
+            <h2>{{section.option_4_title}}</h2>
+            <span>£{{section.option_4_price}}pp</span>
+            <a (click)="navigateToHome(section.address)" class="r-more">{{section.option_4_button}}</a>
+          </div>
+          <p>{{pageContent.dis_details}}</p>
+        </div>
+      </div>
+      <a (click)="hide(i)" class="close_btn">Close</a>
+    </div>
+  </div>
+</div>
+<!-- section ends here -->

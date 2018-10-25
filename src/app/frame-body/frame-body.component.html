@@ -1,0 +1,207 @@
+<div class="container-fulid" #chckWidth>
+  <div class="container ">
+    </div>
+    </div>
+
+
+<div class="container-fulid form-block-main">
+  <ng4-loading-spinner> </ng4-loading-spinner>
+  <div class="container top_form">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form_sec form_sec_iframe" #formClass>
+
+      <div class="for-mobile" *ngIf="quate_from">
+        <h3 class="title-for-mobile">{{pageContent.title}}</h3>
+        <a (click)="openDivs()" name="" id="input" placeholder="Enter Destination" data-toggle="modal" class="form-control" value="">Enter Destination</a>
+        <!-- <a  (click) = "openQuoteForm()" >Enter Destination</a> -->
+        <!-- <button type="submit" class="btn btn-search" data-toggle="modal" data-target="#exampleModal" >Search</button> -->
+      </div>
+      <!-- mobile form start -->
+
+      <!-- mobile form end -->
+      <div #openDiv>
+        <div class="for-desktop-frame" id="modal-id" #mobId>
+          <p><a [ngClass]="withReturn ? 'nav-return active' : 'nav-return'" (click)="PassengerBookingType('return')" style="cursor : pointer">Return</a>
+            <a [ngClass]="withReturn ? 'nav-return' : 'nav-return active'" (click)="PassengerBookingType('oneway')" style="cursor : pointer">One-way</a> 
+            <a [ngClass]="vehicleToStay ? 'nav-return active' : 'nav-return last_btn'" (click)="needVehicle()" style="cursor : pointer">VehicleToStay</a> 
+
+          </p>
+          <!-- twoway form here -->
+          <div class="firstDiv" #firstDiv>
+            <form (keydown.enter)="$event.preventDefault()" [formGroup]="bookingForm" (ngSubmit)="openModal('return')">
+              <div class="form-group full">
+                <label>Where are you traveling from?</label>
+                <div class="form-fields">
+                  <input class="form-control loc" id="text1" placeholder="Location" type="text" tabindex="1" autocorrect="off" autocapitalize="off"
+                    spellcheck="off" #location formControlName="sourceControl">
+                  <span class="error_msg" *ngIf="!bookingForm.controls['sourceControl'].valid && bookingForm.controls['sourceControl'].touched">Please complete location</span>
+                </div>
+
+              </div>
+              <div class="form-group full">
+                <label>Where are you going to?</label>
+                <div class="form-fields">
+                  <input class="form-control loc" id="text2" placeholder="Destination" type="text" autocorrect="off" autocapitalize="off" spellcheck="off"
+                    #destination formControlName="destinationControl">
+                  <span class="error_msg" *ngIf="!bookingForm.controls['destinationControl'].valid && bookingForm.controls['destinationControl'].touched">Please complete location</span>
+
+                </div>
+              </div>
+              <div class="form-group small">
+                <label>Passengers</label>
+                <div class="form-fields">
+                  <input class="form-control pass" id="text3" placeholder="Passengers" type="text" #passenger formControlName="passengerControl">
+                  <span class="error_msg" *ngIf="!bookingForm.controls['passengerControl'].valid && bookingForm.controls['passengerControl'].touched">Please enter passengers.</span>
+                  <!-- <control-messages class="newclass" [control]="bookingForm.controls.passengerControl" ></control-messages> -->
+                </div>
+
+              </div>
+             
+              <div class="form-group small last">
+                <label>Vehicle Standard</label>
+                <div class="form-fields">
+                    <select class="form-control veh" id="text4" placeholder="Please Select" type="text" formControlName="vehicleStandradControl">
+                      <option  value="null" disabled="true" [selected]="true">Please Select</option>
+      
+                        <option  *ngFor="let Vehicle of VehicleStandardFrame" value="{{Vehicle.name}}">{{Vehicle.name}}</option>
+  
+                      </select>
+
+                  <span class="error_msg" *ngIf="!bookingForm.controls['vehicleStandradControl'].valid && bookingForm.controls['vehicleStandradControl'].touched">Please select vehicle.</span>
+
+                </div>
+              </div>
+
+              <div class="form-group date" [ngClass]="withReturn ? '' : 's-small'">
+                <label>Dates</label>
+                <div class="form-fields input-group-append">
+
+                  <input class="form-control date-f" placeholder="Departure" formControlName="pickDateControl" [displayMonths]="displayMonths"
+                    [navigation]="navigation" [minDate]="minDate" (ngModelChange)="getDepDate($event)" [showWeekNumbers]="showWeekNumberss"
+                    ngbDatepicker #n="ngbDatepicker" (click)="toggle(n.toggle(),g.close())">
+
+
+                  <span class="error_msg" *ngIf="!bookingForm.controls['pickDateControl'].valid && bookingForm.controls['pickDateControl'].touched">Pick up date required.</span>
+
+                </div>
+                <div class="form-fields i-return" [ngClass]="withReturn ? '' : 'hidden'">
+                  <input class="form-control date-f" id="text6" placeholder="Return" type="text" formControlName="returnDateControl" [disabled]="is_edit"
+                    [minDate]="minDateSec" [displayMonths]="displayMonths" [navigation]="navigation" [showWeekNumbers]="showWeekNumbers"
+                    ngbDatepicker #g="ngbDatepicker" (click)="toggleSec(g.toggle(),n.close())">
+                  <span class="error_msg" *ngIf="!bookingForm.controls['returnDateControl'].valid && bookingForm.controls['returnDateControl'].touched">Return date required / date not valid.</span>
+
+                </div>
+
+              </div>
+              <div class="form-group date no-mrg-r" [ngClass]="withReturn ? '' : 's-small'">
+                <label>Times</label>
+                <div class="form-fields">
+                  <select class="form-control time" id="text7" formControlName="departureTimeControl" (change)="timesChange($event)">
+                      <option value="null" disabled="true" [selected]="true">Departure</option>
+                      <option *ngFor="let DepTime of time" value="{{DepTime.time}}">{{DepTime.time}}</option>
+    
+                      </select>
+                  <span class="error_msg" *ngIf="!bookingForm.controls['departureTimeControl'].valid && bookingForm.controls['departureTimeControl'].touched">Departure time required.</span>
+
+                </div>
+                <div class="form-fields i-return" [ngClass]="withReturn ? '' : 'hidden'">
+                  <select class="form-control time " id="text8" placeholder="Return" type="text" formControlName="returnTimeControl" (change)="timesChange($event)">
+                            <option value="null" disabled="true" [selected]="true">Return</option>
+    
+                         <option *ngFor="let DepTime of time" value="{{DepTime.time}}"  >{{DepTime.time}}</option>
+                        </select>
+                  <span class="error_msg" *ngIf="!bookingForm.controls['returnTimeControl'].valid && bookingForm.controls['returnTimeControl'].touched">Return time required.</span>
+
+                </div>
+              </div>
+              <div class="form-group small calling_point">
+                <!-- <a href="#" class="btn btn-add-cpoint">Add calling point</a> -->
+              </div>
+
+              <div class="form-group small search_btn last">
+                <button type="submit" class="btn btn-search" data-toggle="modal" data-target="#exampleModal" [disabled]="!bookingForm.valid || timeVal">Search</button>
+              </div>
+            </form>
+          </div>
+          <!-- oneway form -->
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div *ngIf="modal" class="modal form_model fade in frame_model" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:block ;overflow-y: scroll;position:absolute">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <button (click)="closeModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        <h3>Please Complete your details</h3>
+        <p>Our service is 100% free to use, we collate your information so we can contact you with the best price.</p>
+        <div class="form_sec  ">
+          <form (keydown.enter)="$event.preventDefault()" [formGroup]="rform" (ngSubmit)="addPost()">
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control name" id="text11" placeholder="Firstname" type="text" formControlName="firstName">
+                <control-message [control]="rform.controls.firstName"></control-message>
+              </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control name" id="text12" placeholder="Lastname" type="text" formControlName="lastName">
+                <control-message [control]="rform.controls.lastName"></control-message>
+              </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control phone" id="text13" placeholder="Phone number" type="text" formControlName="phoneNumber">
+
+                <control-message [control]="rform.controls.phoneNumber"></control-message>
+              </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control msg" id="text14" placeholder="Email" type="email" formControlName="email">
+                <control-message [control]="rform.controls.email"></control-message>
+
+
+              </div>
+            </div>
+            <div class="form-group full">
+                <div class="form-fields">
+                <input class="form-control " id="text14" placeholder="Voucher Code" formControlName="voucher">
+                     <!-- <span class="error_msg">Please complete destination</span> -->
+                </div>
+              </div>
+              <div class="form-group full">
+                  <div class="form-groupb form-groupchk">
+                    <label class="control_c control-checkbox">
+                      <input type="checkbox" [checked]="gdrp" (change)="gdrp = !gdrp" formControlName="HasOptedOutOfEmail"  />
+                      <span *ngIf="isIframe"  class="control_label control_label_f">I would not like to receive emails from National Express Group  containing exciting news, offers and discounts.</span> <span class="control_indicator_c"></span> </label>
+                  </div>
+                </div>
+                <div>
+                  <label style="font-size: 12px;
+                  color: #fff;
+                  font-weight: 700;">
+                    <span class="control_label">You can unsubscribe from receiving these emails at any time by clicking the unsubscribe link at the bottom of our emails.</span></label>
+                </div>
+
+
+            <div class="form-group full">
+              <div class="form-fields">
+                <button type="submit" class="btn btn-search" [disabled]="!rform.valid">show me the quotes</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

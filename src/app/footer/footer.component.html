@@ -1,0 +1,35 @@
+<footer class="container-fulid footer">
+	<div class="container footer_top">
+		<h2>Get in touch</h2>
+		<div class="footerbox1">
+			<p [innerHTML]="pageContentFooter.address"></p>
+		</div>
+		<div class="footerbox1">
+			<a href="tel:0203456789">{{pageContentFooter.phone}}</a><br>
+			<a href="mailto:{{pageContentFooter.email}}">{{pageContentFooter.email}}</a>
+			<ul>
+				<li><a (click)=facebookLink()><span class="icon icon-facebook"></span></a></li>
+				<li><a (click)=twitterLink()><span class="icon icon-twitter"></span></a></li>
+				<li><a (click)=instaLink()><span class="icon icon-footerInsta"></span></a></li>
+			</ul>
+		</div>
+		<div class="footerbox2">
+			<p>Registered company name: Coachfinder<br> Registered company address: Birmingham Coach Station,
+				<br>Mill Lane, Digbeth, Birmingham, B5 6DD<br> Registered company number: 3120943</p>
+		</div>
+	</div>
+	<div class="container-fulid footer_links">
+		<div class="container">
+			<a (click)="NavigationFooter('whyus')" style="cursor: pointer;">Why us</a>
+			<a (click)="NavigationFooter('services')" style="cursor: pointer;">Services </a>
+			<!-- <a (click)="NavigationFooter('destination')">Destinations</a> -->
+			<a (click)="NavigationFooter('attraction')" style="cursor: pointer;">Top Attractions</a>
+			<a (click)="NavigationFooter('faq')" style="cursor: pointer;">FAQs</a>
+			<a routerLink="/contact">Contact us</a> </div>
+	</div>
+	<div class="container-fulid copy_right">
+		<div class="container">
+			<p>© Kings Ferry Travel Group <br><span class="sup first">|</span> <a routerLink="/privacy">Privacy Policy</a> | <a routerLink="/termsConditions">Terms and Conditions</a>				| <a href="#">Sitemap</a> <span class="sup last">|</span> <br><a (click)="adamsUk()" style="cursor: pointer;" >Website Design and Search Agency – Adams</a></p>
+		</div>
+	</div>
+</footer>

@@ -1,0 +1,48 @@
+.error_msg {
+    background: #ff0000;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    font-size: 12px;
+    color: #ffffff;
+    width: 100%;
+    padding-top: 45px;
+    padding-bottom: 1px;
+    z-index: 4;
+    text-align: center;
+  }
+  .contact_form .form-fields{
+      position: relative;
+      margin-bottom: 4px;
+  }
+  .contact_form .form-group input, .contact_form .form-group textarea{
+      position: relative;
+      z-index: 5;
+      resize: none;
+  }
+  .full .error_msg {
+      padding-top:116px;
+      
+  }
+  @media (max-width: 767px){
+  .form-group input{
+    height : 46px !important
+  }
+} 
+  @media (max-width: 767px){
+  .contactMsg{
+    top:0px
+  }
+}
+@media (max-width: 767px){
+.firstst{
+    margin-bottom: 5px !important;
+ }
+}
+
+@media (max-width: 767px){
+    .secnd{
+        margin-bottom: 4px !important; 
+     }
+}
+    

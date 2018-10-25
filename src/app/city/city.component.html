@@ -1,0 +1,79 @@
+<div class="container-fulid section-ctad">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title" [innerHTML]="pageContent.title">{{pageContent.title}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="container-fulid section-location">
+   <div class="container">
+    <div class="col-xs-12">
+      <div class="row section-book-content">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <p [innerHTML]="pageContent.left_side">{{pageContent.left_side}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 favourite-festival">
+          <img src={{pageContent.file}} alt="location" class="img-responsive">
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+<div *ngFor="let section of pageContent.section;let i=index;">
+ <div [ngClass]="i%2==0 ? 'container-fulid simple_sec':'container-fulid simple_sec stay_sec'">
+   <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center top_text">
+          <img src={{section.section_file}} alt="ticket">
+          <h2 [innerHTML]="section.section_title">{{section.section_title}}</h2>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 thumb" *ngFor="let image of section.images;let p=index">
+          <a href="javascript:void(0)">
+          <img src={{image.image_file}} alt="Blackpool">
+          <span>{{image.image_name}}</span></a>
+        </div>
+    
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="container-fulid simple_sec popular_sec">
+   <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center top_text">
+          <h2>{{pageContent.others[0].section_title}}</h2>
+        </div>
+        <ul>
+        <li *ngFor="let images of pageContent.others[0].data"><a (click)="cityNavigate(images.title,images.id)" >
+          <img src={{images.image_file}} alt="london"  style="cursor:pointer">
+          <span style="cursor:pointer">{{images.title}}</span></a>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fulid section-booking section-last">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row safe-reliable-text">
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 col-why-bottom text-center">
+          <h3 class="title-sub text-left">Destination Prices </h3>
+          <a routerLink="/destination" class="r-more">more</a>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 col-why-bottom text-center">
+          <h3 class="title-sub text-left">Our top attractions</h3>
+          <a routerLink="/attraction/0" class="r-more" >more</a>
+        </div>
+      </div>
+    </div>	
+  </div>
+</div>

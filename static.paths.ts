@@ -1,0 +1,20 @@
+export const ROUTES = [
+  '/',
+  '/login',
+  '/register',
+  '/whyus',
+  '/stepThird/',
+  '/stepFourth/',
+  '/quoteSummary',
+  'thankyou',
+  '/payments',
+  '/contact',
+  '/services',
+  '/services/schoolTrip',
+  '/services/events',
+  '/services/sports',
+  '/services/overseas',
+  '/destination',
+  '/attraction',
+  '/faq'
+];

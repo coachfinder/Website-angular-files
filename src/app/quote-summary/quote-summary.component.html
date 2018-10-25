@@ -1,0 +1,220 @@
+<div class="container-fulid section-cta">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title">QUOTATION SUMMARY</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fulid section-summary" *ngIf="isloaded">
+  <div class="container">
+    <label class="active">1. Booking Summary   </label><label> 2. Payment</label>
+    <h4>MOVEMENT DETAILS</h4>
+  </div>
+
+</div>
+<div class="container-fulid details_top" *ngIf="isloaded">
+  <form>
+    <div class="container top_info">
+      <ul>
+        <li>
+          <p>Contact</p><span>{{quotedata.opportunity.Contact__r.Name}}</span></li>
+        <li>
+          <p>Quotation Ref</p><span>{{quotedata.opportunity.Ref__c}}</span></li>
+        <li>
+          <p>Movement ID</p><span>{{quotedata.movements[0].Id}}</span></li>
+        <li>
+          <p>Passengers</p><span>{{quotedata.movements[0].Passengers__c}}</span></li>
+        <li>
+          <p>Price</p><span>
+            
+            {{quotedata.movements[0].Total__c | currency:'GBP'}}
+
+            <br>{{quotedata.movements[0].Per_Person__c | currency:'GBP'}}pp</span></li>
+      </ul>
+      <ul>
+        <li>
+          <p>Pick-up</p><span>{{quotedata.movements[0].Pick_Up_Date__c | date: 'dd/MM/yyyy'}} {{quotedata.movements[0].Pick_Up_Time__c}}</span></li>
+        <li>
+          <p>Single/Return</p><span>{{quotedata.movements[0].Return_Single__c}}</span></li>
+        <li>
+          <p>Return Leave</p><span>{{quotedata.movements[0].Return_Leave_Date__c | date: 'dd/MM/yyyy'}} {{quotedata.movements[0].Return_Leave_Time__c}}</span></li>
+      </ul>
+    </div>
+    <div class="container address_sec">
+      <div class="half">
+        <p>Pick-up</p>
+        <span>
+          <street *ngIf="quotedata.movements[0].Pick_Up_Street__c !== undefined" >{{quotedata.movements[0].Pick_Up_Street__c}}<br></street>
+          <city *ngIf="quotedata.movements[0].Pickup__c !== undefined">{{quotedata.movements[0].Pickup__c}}<br> </city>
+          <county *ngIf="quotedata.movements[0].Pick_Up_County__c !== undefined">{{quotedata.movements[0].Pick_Up_County__c}}<br> </county>
+          <postal  *ngIf="quotedata.movements[0].Pick_Up_Post_Code__c !== undefined">{{quotedata.movements[0].Pick_Up_Post_Code__c}}<br> </postal>
+          <country  *ngIf="quotedata.movements[0].Pick_up_Country__c !== undefined">{{quotedata.movements[0].Pick_up_Country__c}}<br></country>
+    </span>
+      </div>
+      <div class="half">
+        <p>Destination</p>
+        <span>
+          <street *ngIf="quotedata.movements[0].Destination_Street__c !== undefined">{{quotedata.movements[0].Destination_Street__c}}<br> </street>
+          <city *ngIf="quotedata.movements[0].Destination__c !== undefined">{{quotedata.movements[0].Destination__c}}<br></city>
+          <county *ngIf="quotedata.movements[0].Destination_County__c !== undefined">{{quotedata.movements[0].Destination_County__c}}<br> </county>
+          <postal *ngIf="quotedata.movements[0].Destination_Postal_Code__c !== undefined">{{quotedata.movements[0].Destination_Postal_Code__c}}<br> </postal>
+          <country *ngIf="quotedata.movements[0].Destination_Country__c !== undefined">{{quotedata.movements[0].Destination_Country__c}}<br> </country>
+    </span>
+      </div>
+      <!--<div class="route_warn" >
+        <p>Route</p>
+        <div class="route_warn_sec">
+          <span>Additonal calling point In Leeds, LS1 2JP</span>
+          <span class="charges">Parking Charges: Please note that parking charges are not included in your hire unless otherwise stated on your quotation. </span>
+        </div>
+      </div>-->
+    </div>
+    <div class="container Vehicle_sec">
+      <h4>Vehicle </h4>
+      <div class="half">
+        <ul>
+
+          <li>
+            <p>Vehicle</p>
+            <span>{{quotedata.movements[0].Private_Hire_Vehicles__r.records[0].Name}}</span>
+          </li>
+          <li>
+            <p>Seats</p><span>{{quotedata.movements[0].Private_Hire_Vehicles__r.records[0].Seats__c}}</span></li>
+          <li>
+            <p>Vehicle Description</p><span>{{quotedata.movements[0].Private_Hire_Vehicles__r.records[0].Vehicle_Description__c}}</span></li>
+        </ul>
+      </div>
+      <div class="half half_r">
+        <ul>
+          <li>
+            <p>Sub Total</p><span>{{quotedata.movements[0].Private_Hire_Vehicles__r.records[0].Excluding_Tax_Amount__c | currency:'GBP'}}</span></li>
+          <li>
+            <p>Tax</p><span>{{quotedata.movements[0].Private_Hire_Vehicles__r.records[0].VAT__c | currency:'GBP'}}</span></li>
+          <li>
+            <p>Total</p><span>{{quotedata.movements[0].Private_Hire_Vehicles__r.records[0].Total__c | currency:'GBP'}}</span></li>
+        </ul>
+
+      </div>
+      <div class="vehicle_grand">
+        <div class="half_btn">
+          <!--<a href="javascript:void(0)" class="r-more back_btn">Amend quote</a>-->
+        </div>
+        <div class="half_total">
+          <label> {{quotedata.movements[0].Private_Hire_Vehicles__r.records[0].Total__c | currency:'GBP'}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="container additional_sec">
+      <div class="ferry_booking">
+        <p>Do you require information on hotels and places to stay?</p>
+        <div class="ferry_bookingc">
+          <div class="form-groupb">
+            <label class="control_qu control-checkbox">
+              <input type="checkbox" checked disabled />
+              <span class="control_label_qu">{{quotedata.movements[0].Hotel_Booking__c==true ? 'Yes' : 'No'}}</span> <span class="control_indicator_qu"></span> </label>
+          </div>
+          <!--<div class="form-groupb">
+            <label class="control_qu control-checkbox">
+              <input type="checkbox" />
+              <span class="control_label_qu">No</span> <span class="control_indicator_qu"></span> </label>
+          </div>-->
+        </div>
+      </div>
+      <div class="ferry_booking">
+        <p>Do you require assistance with a Ferry booking?</p>
+        <div class="ferry_bookingc">
+
+          <div class="form-groupb">
+            <label class="control_qu control-checkbox">
+              <input type="checkbox" checked disabled />
+              <span class="control_label_qu">{{quotedata.movements[0].Ferry_Crossing__c==true ? 'Yes' : 'No'}}</span> <span class="control_indicator_qu"></span> </label>
+          </div>
+
+          <!--<div class="form-groupb">
+            <label class="control_qu control-checkbox">
+              <input type="checkbox" />
+              <span class="control_label_qu">No</span> <span class="control_indicator_qu"></span> </label>
+          </div>-->
+        </div>
+      </div>
+    </div>
+    <div class="container ticket_sec">
+      <h4>Event Tickets required</h4>
+      <ul style="border-bottom : 0px;">
+        <li>
+          <p>Attraction Name</p>
+        </li>
+        <li>
+          <p>Cost per ticket</p>
+        </li>
+        <li>
+          <p>Quantity</p>
+        </li>
+      </ul>
+      <ul *ngFor="let extra of quotedata.privateExtras ;let i=index">
+        <li><span>{{extra.Name}}</span></li>
+        <li><span>{{extra.Unit_Price__c | currency:'GBP'}}</span></li>
+        <li><span>{{extra.Quantity__c}}</span></li>
+      </ul>
+    </div>
+    <div class="container terms_sec">
+      <h4>Terms & Conditions</h4>
+      <div class="term_box">
+        <h4>COACH FINDER – Terms and Conditions for Private Hire</h4>
+        <strong>1. Applications</strong>
+        <p>These conditions apply whether a contract has been made verbally or in writing. The hirer acts on behalf of all the
+          passengers traveling on the vehicles. If the hirer is a company, group, or partnership, an individuals must be
+          named as a responsible person. The hirer is responsible for the actions and decisions of all the passengers on
+          board including any additional costs incurred in performing the contract, whether or not they actually travel with
+          the party. The company will only accept instructions from the hirer. If the hirer is not going to travel with the
+          party, a representative must be chosen, and the company informed prior to the hire taking place.</p>
+        <strong>2. Quotations</strong>
+        <p>These conditions apply whether a contract has been made verbally or in writing. The hirer acts on behalf of all the
+          passengers traveling on the vehicles. If the hirer is a company, group, or partnership, an individuals must be
+          named as a responsible person. The hirer is responsible for the actions and decisions of all the passengers on
+          board including any additional costs incurred in performing the contract, whether or not they actually travel with
+          the party. The company will only accept instructions from the hirer. If the hirer is not going to travel with the
+          party, a representative must be chosen, and the company informed prior to the hire taking place.</p>
+      </div>
+      <div class="term_chk">
+        <div class="form-group">
+          <label class="control_tm control-checkbox">
+              <input type="checkbox"  (change)="isChecked = !isChecked" />
+              <span class="control_label_tm">I am over 18 years old and have read and understood the terms and conditions. I confirm that I am authorised to accept these terms and conditions on behalf of all other persons included in this booking, whether named or not.</span> <span class="control_indicator_tm"></span> </label>
+        </div>
+      </div>
+    </div>
+    <div class="container payment_sec">
+      <ul>
+        <!--<li>
+          <p>Select Payment Method:</p>
+          <select class="classic">
+        <option>ONLINE PAYMENT</option>
+        <option>demo 1 </option>
+        <option>demo 2 </option>
+      </select>
+        </li>-->
+        <li>
+          <p>Select Payment (%):</p>
+          <select class="classic" #percentage>
+        <option>100%</option>
+        <option>90%</option>
+        <option>80%</option>
+        <option>70%</option>
+        <option>60%</option>
+        <option>50%</option>
+        <option>40%</option>
+        <option>30%</option>
+        <option>20%</option>
+        <option>10%</option>
+      </select>
+        </li>
+      </ul>
+      <button [disabled]="!isChecked" (click)="go_to_payment(percentage.value)" class="btn r-more">Proceed to payment</button>
+      <!--<a routerLink="/payments" [disabled]="isChecked" class="r-more">Proceed to payment {{isChecked}}</a>-->
+    </div>
+  </form>
+
+</div>

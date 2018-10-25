@@ -1,0 +1,35 @@
+<div class="container-fulid section-cta">
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row">
+          <h2 class="cta-title"[innerHTML]="pageContent.title"></h2>
+          <p>{{pageContent.subtitle}}</p>
+        </div>
+      </div>
+      <div class="cta-boxes">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <p class="text_center" [innerHTML]="pageContent.left_desc"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fulid section-sports">
+    <div class="container">
+      <div class="row img_sec">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <img src={{pageContent.file1}} class="img-reliable" alt="" style="width: 346px !important; height: 270px !important;">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <img src={{pageContent.file2}} class="img-reliable" alt="" style="width: 346px !important; height: 270px !important;">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <img src={{pageContent.file3}} class="img-reliable" alt="" style="width: 346px !important; height: 270px !important;">
+        </div>
+      </div>
+      <p [innerHTML]="pageContent.content"></p>
+      <p style="padding: 0px; margin: 0px;"><a href="{{pageContent.quote_link}}" class="r-more" [innerHTML]="pageContent.quote_text"></a></p>
+    </div>
+  </div>	
+  

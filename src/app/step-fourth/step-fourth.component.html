@@ -1,0 +1,109 @@
+<div class="container-fulid steps_sec" style="position : relative;">
+  <div class="container">
+    <p-growl [(value)]="msgs"></p-growl>
+    <div [ngClass]="!isIframe ? 'row steps_top_Sec':'row steps_top_Sec steps_top_Sec_n'">
+      <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+        <h2>Before completing your booking, would you like to add any extras?</h2>
+      </div>
+      <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5"> <a (click)="completeBooking()" class="r-more" style="cursor: pointer;">Submit extras or continue</a> </div>
+    </div>
+  </div>
+</div>
+<div [ngClass]="!isIframe ? 'container-fulid section-booking step4_sec':'container-fulid section-booking section-booking-frame step4_sec'">
+  <div class="container">
+
+    <div class="row eq_height">
+      <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 col-lg-4 col-lg-offset-0 sec_outer">
+        <div class="booking_box">
+
+          <div class="booking_box_img"><img src="assets/images/hotel_icon.png" alt=""></div>
+          <h2>Hotel Rooms</h2>
+          <p>If you need a place to stay, we can get you great prices through our partners.</p>
+          <a (click)="openModal()" class="r-more" id="hotel_learn_more" style="cursor: pointer;">Learn more</a> </div>
+        <div *ngIf="openMod" class="ferry_sec" style="display: block;">
+          <h4>Do you require information on Hotels and places to stay?</h4>
+          <ul>
+            <li>
+              <div class="form-groupb">
+                <label class="control control-radio">
+                <input type="radio" name="radio" [checked]="hotel" (click)="setHotel('yes')" />
+                <span class="control_label" >Yes</span> <span class="control_indicator"></span> </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-groupb">
+                <label class="control control-radio">
+                <input type="radio" name="radio" [checked]="!hotel" (click)="setHotel('no')" />
+                <span class="control_label">No</span> <span class="control_indicator"></span> </label>
+              </div>
+            </li>
+          </ul>
+          <a (click)="openModal()" class="r-more" id="hotel_close">done</a>
+        </div>
+      </div>
+      <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 col-lg-4 col-lg-offset-0 sec_outer">
+        <div class="booking_box">
+          <div class="booking_box_img"><img src="assets/images/ferry_icon.png" alt=""></div>
+          <h2>Ferry Crossing</h2>
+          <p>If you haven’t already booked your crossing let us know and we can help arrange this for you.</p>
+          <a (click)="openModalSecond()" class="r-more" id="ferry_learn_more" style="cursor: pointer;">Learn more</a> </div>
+        <div *ngIf="openModSec" class="ferry_sec" style="display: block;">
+          <h4>do you require assistance with a Ferry booking?</h4>
+          <ul>
+            <li>
+              <div class="form-groupb">
+                <label class="control control-radio">
+                <input type="radio" name="radio" [checked]="assist"(click)="assistance('yes')"/>
+                <span class="control_label">Yes</span> <span class="control_indicator"></span> </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-groupb">
+                <label class="control control-radio">
+                <input type="radio" name="radio" [checked]="!assist" (click)="assistance('no')"/>
+                <span class="control_label">No</span> <span class="control_indicator"></span> </label>
+              </div>
+            </li>
+          </ul>
+          <a (click)="openModalSecond()" class="r-more" id="ferry_close">done</a> </div>
+      </div>
+      <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 col-lg-4 col-lg-offset-0 sec_outer">
+        <div class="booking_box">
+          <div class="booking_box_img"><img src="assets/images/ticket_icon.png" alt="tic"></div>
+          <h2>Event Tickets </h2>
+          <p>Make big savings when you book your tickets through Coachfinder. From thrill seeking theme parks to historical
+            sites, there’s lots to choose from.
+          </p>
+          <a (click)="openModalThird()" class="r-more" id="ticket_learn_more" style="cursor: pointer;">Learn more</a> </div>
+        <div *ngIf="openModThrd" class="ticket_sec" style="display: block;">
+          <h4>Select attractions you’re interested in…</h4>
+          <div style="overflow: hidden; height: 250px; overflow-y: auto;">
+          <ul>
+            <li class="top_sec_header">
+              <div class="blank"></div>
+              <label class="price_head">Cost per ticket</label>
+              <label class="quant_head">Quantity</label>
+
+            </li>
+            <li *ngFor="let Events of events;let i=index ">
+              <div class="form-groupb">
+                <label class="control_c control-checkbox">
+              <!-- <form > -->
+              <input type="checkbox" [checked]="SelectedIdFinal[i]" (click)="attraction(Events.Id,i)"/>
+            <!-- </form> -->
+              <span class="control_label">{{Events.Name}}</span> <span class="control_indicator_c"></span> </label>
+              </div>
+              <label class="price">&#163; {{Events.UnitPrice__c |  number:'.2-5'}}</label>
+              <input type="text" class="quant" value="values[i]"[(ngModel)]="newName[Events.Id]" (keyup)="newFun(Events.Id,$event,i)">
+
+            </li>
+
+          </ul>
+        </div>
+          <a (click)="closeModalThird()" class="r-more" id="ticket_close">done</a> </div>
+      </div>
+    </div>
+    <h4 [ngClass]="!isIframe ? '':'bottom_text_f'">Everything from hotel rooms to tickets. Simply complete your request for the extra services we have available and we'll
+      help arrange them for you from our lists of approved suppliers.</h4>
+  </div>
+</div>

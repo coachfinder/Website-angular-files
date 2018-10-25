@@ -1,0 +1,846 @@
+<div class="container" *ngIf="validCoupon">
+  <div class="voucher_code">
+    Your voucher '{{couponValue}}' has been successfully applied to the prices shown below, giving you a £{{leadDetail.Voucher_Amount__c}} discount.
+
+  </div>
+</div>
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="container" *ngIf="recomendMessage">
+  <div class="voucher_codeSec">
+    Your recommended vehicle does not reach your passenger numbers, if you require multiple vehicles please call 0845 257 9845 and we <br> will be happy to amend your quote.
+  </div>
+</div>
+<div class="container" *ngIf="validCoupon == false && emptyy == false">
+  <div class="voucher_codeSec">
+    Your voucher code was not recognised.
+  </div>
+</div>
+<div class="container">
+  <div class="voucher_codeSec" *ngIf="zeroErr">
+    We are unable to carry out your booking online, please call us on 0845 257 9845 to discuss your group travel requirements.
+  </div>
+</div>
+<div class="container-fulid steps_sec">
+
+  <div class="container">
+    <div [ngClass]=" !isIframe ? 'sidebar':'sidebar sidebar-iframe'">
+
+
+      <p-growl [(value)]="msgs"></p-growl>
+      <h2><a id="summery_toggle" (click)="openOrderSum()" style="cursor : pointer">Your order summary</a></h2>
+      <div class="for-desktop" #openOrder>
+        <!-- for coachFinder -->
+        <p *ngIf="!isIframe"><a [ngClass]="twoWayRoute ?'nav-return active':'nav-return' " (click)="PassengerBookingType('return')" style="cursor : pointer">Return</a>
+          <a [ngClass]="oneWayRoute ? 'nav-oneway active':'nav-oneway'" (click)="PassengerBookingType('oneway')" style="cursor : pointer">One-way</a> 
+          <a [ngClass]="vehicleToStay ? 'nav-oneway active':'nav-oneway'" (click)="needVehicle()" style="cursor : pointer">VehicleToStay</a> 
+       </p>
+       <!-- forIframe -->
+       <p *ngIf="isIframe"><a [ngClass]="twoWayRoute ?'nav-return activee':'nav-return' " (click)="PassengerBookingType('return')" style="cursor : pointer">Return</a>
+        <a [ngClass]="oneWayRoute ? 'nav-oneway activee':'nav-oneway'" (click)="PassengerBookingType('oneway')" style="cursor : pointer">One-way</a> 
+        <a [ngClass]="vehicleToStay ? 'nav-oneway activee':'nav-oneway'" (click)="needVehicle()" style="cursor : pointer">VehicleToStay</a> 
+     </p>
+        <!-- twoway form here -->
+        <div class="firstDiv" #firstDiv>
+          <form (keydown.enter)="$event.preventDefault()" [formGroup]="bookingForm" (ngSubmit)="addPost()">
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control loc" id="text1" [(ngModel)]="leadData.source_loc" type="text" tabindex="1" autocorrect="off" autocapitalize="off"
+                  spellcheck="off" #location formControlName="sourceControl">
+
+                <!-- <control-messages  class="error_msg"  [control]="bookingForm.controls.sourceControl" ></control-messages> -->
+                <span class="error_msg" *ngIf="!bookingForm.controls['sourceControl'].valid && bookingForm.controls['sourceControl'].touched">Please complete location.</span>
+              </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control loc" id="text2" [(ngModel)]="leadData.destination_loc" type="text" autocorrect="off" autocapitalize="off"
+                  spellcheck="off" #destination formControlName="destinationControl">
+                <span class="error_msg" *ngIf="!bookingForm.controls['destinationControl'].valid && bookingForm.controls['destinationControl'].touched">Please complete location.</span>
+              </div>
+            </div>
+            <!-- <div class="form-group">
+                <a href="step_3_tool.html" class="btn btn-add-cpoint">Add calling point</a>
+              </div> -->
+            <div class="form-group date">
+              <label>Dates</label>
+              <div class="form-fields">
+                <input class="form-control date-f" id="text3" [(ngModel)]="model" type="text" [minDate]="minDate" (ngModelChange)="getDepDate($event)"
+                  name="dp" ngbDatepicker #d="ngbDatepicker" (click)="toggle(d.toggle(),r.close(),showdistance=true)" formControlName="pickDateControl"
+                  (change)="checkFn($event)">
+                <span class="error_msg" *ngIf="!bookingForm.controls['pickDateControl'].valid && bookingForm.controls['pickDateControl'].touched">Pick up date required.</span>
+              </div>
+              <div class="form-fields i-return">
+                <!-- below div added by me -->
+
+                <input class="form-control date-f" id="text4" [(ngModel)]="model2" type="text" [disabled]="is_edit" [minDate]="minDateSec"
+                  name="dp" ngbDatepicker #r="ngbDatepicker" (click)="toggle(r.toggle(),d.close(),showdistance=true)" formControlName="returnDateControl"
+                  (change)="checkFn($event)">
+                <span class="error_msg" *ngIf="!bookingForm.controls['returnDateControl'].valid && bookingForm.controls['returnDateControl'].touched">Return date required / date not valid.</span>
+
+              </div>
+            </div>
+            <div class="form-group date">
+              <label>Times</label>
+              <div class="form-fields">
+
+                <select class="form-control time " id="text6" placeholder="Departure time" type="text" formControlName="departureTimeControl"
+                  (change)="checkFn($event)" [(ngModel)]="leadData.request.request.departureTime">
+                        <!-- <option value="null" disabled="true" [selected]>{{leadData.return_time}}</option> -->
+  
+                        <option *ngFor="let DepTime of time" [value]="DepTime.time" >{{DepTime.time}}</option>
+                        </select>
+                <span class="error_msg" *ngIf="!bookingForm.controls['departureTimeControl'].valid && bookingForm.controls['departureTimeControl'].touched">Departure time required.</span></div>
+              <div class="form-fields i-return">
+                <select class="form-control time " id="text6" type="text" formControlName="returnTimeControl" (change)="checkFn($event)"
+                  [(ngModel)]="leadData.request.request.returnTime">
+                        <!-- <option value="null" disabled="true" [selected]>{{leadData.return_time}}</option> -->
+  
+                        <option *ngFor="let DepTime of time" [value]="DepTime.time" >{{DepTime.time}}</option>
+                        </select>
+                <span class="error_msg " *ngIf="!bookingForm.controls['returnTimeControl'].valid && bookingForm.controls['returnTimeControl'].touched">Return time required.</span>
+              </div>
+            </div>
+            <div class="form-group small">
+              <label>Passengers</label>
+              <div class="form-fields">
+                <input class="form-control pass" id="text7" placeholder="Passengers" type="text" #passenger formControlName="passengerControl"
+                  (change)="checkFn($event)"  (keyup)="editPass()" [(ngModel)]="leadData.request.request.passengers">
+                <span class="error_msg errorLarge " *ngIf="!bookingForm.controls['passengerControl'].valid && bookingForm.controls['passengerControl'].touched">Please enter passenger.</span>
+                <!-- <control-messages  class="error_msg" [control]="bookingForm.controls.passengerControl" ></control-messages> -->
+
+              </div>
+            </div>
+            <div class="form-group small last">
+              <label>Vehicle Standard</label>
+              <div class="form-fields">
+                <select *ngIf="!isIframe" class="form-control veh" id="text8" placeholder="Please Select" type="text" formControlName="vehicleStandradControl"
+                  (change)="checkFn($event)" [(ngModel)]="vehicle">
+                    <!-- <option value="null" disabled="true" [selected]="true">Please Select</option> -->
+                 <option *ngFor="let Vehicle of VehicleStandard" value="{{Vehicle.name}}">{{Vehicle.name}}</option>
+                </select>
+
+                <select *ngIf="isIframe" class="form-control veh" id="text8" placeholder="Please Select" type="text" formControlName="vehicleStandradControl"
+                  (change)="checkFn($event)" [(ngModel)]="vehicle">
+                    <!-- <option value="null" disabled="true" [selected]="true">Please Select</option> -->
+                 <option *ngFor="let Vehicle of VehicleStandardFrame" value="{{Vehicle.name}}">{{Vehicle.name}}</option>
+                </select>
+                <span class="error_msg errorLarge" *ngIf="!bookingForm.controls['vehicleStandradControl'].valid && bookingForm.controls['vehicleStandradControl'].touched">Please enter vehicle.</span>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label>Voucher Code</label>
+              <div class="form-fields">
+                <input [disabled]="validCoupon" class="form-control time" id="text5" placeholder="Voucher Code" type="text" formControlName="voucher" (keyup)="editPass()" [(ngModel)]="VoucherCoupon">
+                <span class="error_msg errorLarge" *ngIf="!validCoupon && !emptyy" >  Your voucher is not valid.</span>
+               </div>
+               
+            </div>
+        
+            <div class="showdist">
+              <div class="small">
+                <span>Journey Time</span>
+                <label>{{leadData.duration}}</label>
+              </div>
+              <div class="small last">
+                <span>Distance</span>
+                <label>{{leadData.request.request.distance}} miles</label>
+              </div>
+            </div>
+            <div class="form-group full full_btn">
+              <button type="submit" class="btn r-more" [disabled]="!bookingForm.valid || !showdistance">Amend Quote</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- oneway form -->
+        <div class="secDiv" #secDiv>
+          <form [formGroup]="bookingFormSec" (ngSubmit)="addPost()">
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control loc" id="text1" [(ngModel)]="leadData.source_loc" type="text" tabindex="1" autocorrect="off" autocapitalize="off"
+                  spellcheck="off" #location2 formControlName="sourceControl">
+                <span class="error_msg" *ngIf="!bookingFormSec.controls['sourceControl'].valid && bookingFormSec.controls['sourceControl'].touched">Please complete location</span>                </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control loc" id="text2" [(ngModel)]="leadData.destination_loc" type="text" autocorrect="off" autocapitalize="off"
+                  spellcheck="off" #destination2 formControlName="destinationControl">
+                <span class="error_msg" *ngIf="!bookingFormSec.controls['destinationControl'].valid && bookingFormSec.controls['destinationControl'].touched">Please complete location.</span>
+              </div>
+            </div>
+            <!-- <div class="form-group">
+            <a href="step_3_tool.html" class="btn btn-add-cpoint">Add calling point</a>
+          </div> -->
+            <div class="form-group date s-small">
+              <label>Date</label>
+              <div class="form-fields input-group">
+                <input class="form-control date-f" id="text3" [(ngModel)]="model" type="text" [minDate]="minDate" ngbDatepicker #e="ngbDatepicker"
+                  (click)="e.toggle()" formControlName="pickDateControl">
+                <span class="error_msg" *ngIf="!bookingFormSec.controls['pickDateControl'].valid && bookingFormSec.controls['pickDateControl'].touched">Pick up date required.</span>
+              </div>
+              <div class="form-fields i-return">
+           
+                <!-- <div class="input-group">
+                  <input class="form-control date-f" id="text4" [(ngModel)]="model2" type="text" ngbDatepicker #p="ngbDatepicker" (click)="p.toggle()"
+                    formControlName="returnDateControl">
+            
+                </div> -->
+              </div>
+
+            </div>
+            <div class="form-group date no-mrg-r s-small">
+              <label>Time</label>
+              <div class="form-fields">
+
+                <select class="form-control time " id="text6" placeholder="11:30" type="text" formControlName="departureTimeControl" [(ngModel)]="leadData.request.request.departureTime">
+                    <!-- <option value="null" disabled="true" [selected]>{{leadData.return_time}}</option> -->
+
+                    <option *ngFor="let DepTime of time" [value]="DepTime.time" >{{DepTime.time}}</option>
+                  </select>
+                <span class="error_msg" *ngIf="!bookingFormSec.controls['departureTimeControl'].valid && bookingFormSec.controls['departureTimeControl'].touched">Departure time required.</span>
+              </div>
+              <div class="form-fields i-return">
+                <!-- <select class="form-control time " id="text6" placeholder="11:30" type="text" formControlName="returnTimeControl" [(ngModel)]="leadData.request.request.returnTime">
+
+                  <option>00:00</option>
+                  </select>
+                <span class="error_msg" *ngIf="!bookingFormSec.controls['returnTimeControl'].valid && bookingFormSec.controls['returnTimeControl'].touched">Return time required.</span> -->
+              </div>
+            </div>
+            <div class="form-group small">
+              <label>Passengers</label>
+              <div class="form-fields">
+                <input class="form-control pass" id="text7" placeholder="Passengers" type="text" #passenger formControlName="passengerControl"
+                  [(ngModel)]="leadData.request.request.passengers" (keyup)="editPass()" >
+                <!-- <span class="error_msgPassenger "  *ngIf="!bookingFormSec.controls['passengerControl'].valid && bookingFormSec.controls['passengerControl'].touched">Please enter passengers.</span> -->
+                <!-- <control-messages [control]="bookingFormSec.controls.passengerControl" ></control-messages> -->
+
+              </div>
+            </div>
+            <div class="form-group small last">
+              <label>Vehicle Standard</label>
+              <div class="form-fields">
+                <select  *ngIf="!isIframe" class="form-control veh" id="text8"  type="text" formControlName="vehicleStandradControl"
+                  [(ngModel)]="vehicle">
+                <option *ngFor="let Vehicle of VehicleStandard" value="{{Vehicle.name}}">{{Vehicle.name}}</option>
+               </select>
+               <select  *ngIf="isIframe" class="form-control veh" id="text8" placeholder="Executive" type="text" formControlName="vehicleStandradControl"
+               [(ngModel)]="vehicle">
+                  <option *ngFor="let Vehicle of VehicleStandardFrame" value="{{Vehicle.name}}">{{Vehicle.name}}</option>
+            </select>
+                <span class="error_msg errorLarge" *ngIf="!bookingFormSec.controls['vehicleStandradControl'].valid && bookingFormSec.controls['vehicleStandradControl'].touched">Please select vehicle.</span>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label>Voucher Code</label>
+              <div class="form-fields">
+                <input [disabled]="validCoupon" class="form-control time" id="text5" placeholder="Voucher Code" type="text" formControlName="voucher" [(ngModel)]="VoucherCoupon">
+                 <span class="error_msg errorLarge" *ngIf="!validCoupon && !emptyy">  Your voucher is not valid.</span>
+               </div>
+               
+            </div>
+            <div class="showdist">
+              <div class="small">
+                <span>Journey Time</span>
+                <label>{{leadData.duration}}</label>
+              </div>
+              <div class="small last">
+                <span>Distance</span>
+                <label>{{leadData.request.request.distance}} miles</label>
+              </div>
+            </div>
+
+            <div class="form-group full full_btn">
+              <button type="submit" class="btn r-more" [disabled]="!bookingFormSec.valid">Amend Quote</button>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+    <div [ngClass]="!isIframe ? 'main_text':'main_text main_text_n'">
+      <h4>Your choices</h4>
+      <!-- <p *ngIf="!isIframe">
+        Based on the information you have given us and your requirements for {{sheetsneed}} passengers, we recommend a <strong>‘{{leadDetail.Vehicle_Seats__c}} seater {{coachtext.recommend}}'</strong>. Your options are shown below.<br>If you require multiple vehicles or multiple journeys please call us on 0845 257 9845 and we will be happy to help.
+     </p> -->
+      <!-- <p *ngIf="isIframe && vehicle!='Vintage Bus' && vehicle!='Bus'">
+        Based on the information you have given us and your requirements for {{sheetsneed}} passengers, we recommend a <strong>‘{{leadDetail.Vehicle_Seats__c}} seater coach’</strong>. Your options are shown below.<br>If you require multiple vehicles or multiple journeys please call us on 0845 257 9845 and we will be happy to help.
+     </p> -->
+     <p>
+      Based on the information you have given us and your requirements for {{sheetsneed}} passengers, we recommend a <strong>‘{{leadDetail.Vehicle_Seats__c}} seater {{coachtext.recommend}}'</strong>. Your options are shown below.<br>If you require multiple vehicles or multiple journeys please call us on 0845 257 9845 and we will be happy to help.
+   </p>
+        <!--Based on the information you have given us, we recommend a <strong>{{leadDetail.Vehicle_Seats__c}} seater coach.</strong>        Your options are shown below.</p>-->
+      <div class="choice_sec">
+        <div [ngClass]="!isIframe ? 'choice_box recomm':'choice_box recomm_n'" *ngIf="leadDetail.Vehicle_Lookup__c">
+          <div class="choice_box_left">
+            <h2>Our recommendation ...</h2>
+            <div class="bus_icon">
+              <img src="assets/images/bus_icon_blue.png" alt="bus" />
+            </div>
+            <div class="bus_options">
+              <h2>No. of Seats
+                <span class="divider_C"></span><span>{{seats.recommend}}</span></h2>
+              <h3>Vehicle Standard<span class="divider_C"></span><span> <a class='danger1' popover="{{getToolTip(coachtext.recommend)}}"
+                  popoverPlacement="bottom"
+                  [popoverOnHover]="true"
+                  [popoverCloseOnMouseOutside]="true">?</a>
+                  <div id="popover_content_wrapper1" style="display: none">
+                  <div> {{getToolTip(coachtext.recommend)}} A Standard coach has lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</div>
+                  </div>{{coachtext.recommend}}</span>
+              </h3>
+            </div>
+          </div>
+          <div class="choice_box_right">
+            <p class="price-blk">
+              <span class="b-price">£{{leadDetail.Auto_Price__c}}</span> <br>
+
+              <span class="person-price">£{{this.Auto_Price__c }}  per person</span><br>
+
+              <a (click)="bookNow(leadDetail.Vehicle_Lookup__c,1)" class="r-more" style="cursor : pointer" *ngIf="leadDetail.Auto_Price__c">SELECT</a>
+               <a (click)="bookNow(leadDetail.Vehicle_Lookup__c,0)" class="r-more" style="cursor : pointer"  *ngIf="leadDetail.Auto_Price__c">EMAIL QUOTE</a>
+            </p>
+          </div>
+          <div class="step3_imgs" style="display: flex;align-items: center; justify-content: center; flex-wrap: wrap;">
+            <a (click)="viewImages(0)" onMouseOver="this.style.color='#f36'" onMouseOut="this.style.color='#242e51'" style="cursor:pointer">View images</a>
+            <img (click)="viewImages(0)" class="view-image-icon" src="../../assets/images/camera_icon.png"/>
+            <ul *ngIf="viewImg[0] && seats.recommend == 16">
+              <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/1-seats.jpg" alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/2-mercedes_van.jpg" alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/3-orangeseats.jpg" alt="img"></li>
+            </ul>
+                <!-- LUXURY -->
+
+                <ul *ngIf="viewImg[0] && seats.recommend == 24 && coachtext.recommend =='Luxury Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/34_VIP/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && seats.recommend == 34 && coachtext.recommend =='Luxury Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && seats.recommend == 35 && coachtext.recommend =='Luxury Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <!-- EXECUITIVE -->
+                <ul *ngIf="viewImg[0] && seats.recommend == 29 && coachtext.recommend =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && seats.recommend == 49  && coachtext.recommend =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/1-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/2-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/3-Exec.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && seats.recommend == 53  && coachtext.recommend =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/1-53-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/2-53-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/3-53-Exec.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && seats.recommend == 71  && coachtext.recommend =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/1-71-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/2-71-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/3-71-Exec.jpg" alt="img"></li>
+                </ul>
+                <!-- Standard Coach -->
+                <ul *ngIf="viewImg[0] && seats.recommend == 29  && coachtext.recommend =='Standard Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/2-VIP.jpg"  alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/3-VIP.jpg"  alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && seats.recommend == 49  && coachtext.recommend =='Standard Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/1-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/2-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/3-Standard.jpg" alt="img"></li>
+
+                </ul>
+                <ul *ngIf="viewImg[0] && seats.recommend == 53  && coachtext.recommend =='Standard Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/1-53-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/2-53-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/3-53-Standard.jpg" alt="img"></li>
+                </ul>
+                <!-- Double Decker Bus -->
+                <ul *ngIf="viewImg[0] && coachtext.recommend =='Double Decker Bus'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W1.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBusS4W2.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W3.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && coachtext.recommend =='Vintage Bus'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb1.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb2.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/webvintage3.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[0] && coachtext.recommend =='Single Decker Bus'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/single2web.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+                </ul>
+               
+          </div>
+        </div>
+
+
+        <div [ngClass]="!isIframe ? 'choice_box':'choice_box choice_box_n'" *ngIf="leadDetail.Coachfinder_Cheaper_Lookup__c!=undefined" >
+          <div class="choice_box_left">
+            <h2>A cheaper alternative</h2>
+            <div class="bus_icon">
+              <img src="assets/images/bus_icon.png" alt="bus" />
+            </div>
+            <div class="bus_options">
+              <h2>No. of Seats
+                <span class="divider_C"></span><span>{{seats.cheaper}}</span></h2>
+              <h3>Vehicle Standard<span class="divider_C"></span><span> <a class='danger' popover="{{getToolTip(coachtext.cheaper)}}"
+                  popoverPlacement="bottom"
+                  [popoverOnHover]="true"
+                  [popoverCloseOnMouseOutside]="true">?</a>
+<div id="popover_content_wrapper" style="display: none">
+<div>A Executive coach has lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</div>
+</div>{{coachtext.cheaper}}</span></h3>
+            </div>
+          </div>
+          <div class="choice_box_right">
+            <p class="price-blk">
+              <span class="b-price" style="float:left">£{{leadDetail.Coachfinder_Cheaper_Price__c}}</span> <br>
+              <span class="person-price" style="float:left">£{{this.Coachfinder_Cheaper_Price__c}} per person</span><br>
+
+              <a (click)="bookNow(leadDetail.Coachfinder_Cheaper_Lookup__c,1)" class="r-more" style="cursor : pointer"  *ngIf="leadDetail.Coachfinder_Cheaper_Price__c >0">SELECT</a>
+              <a (click)="bookNow(leadDetail.Coachfinder_Cheaper_Lookup__c,0)" class="r-more" style="cursor : pointer"  *ngIf="leadDetail.Coachfinder_Cheaper_Price__c >0">EMAIL QUOTE</a>
+
+            </p>
+          </div>
+          <div class="step3_imgs" style="display: flex;align-items: center; justify-content: center; flex-wrap: wrap;">
+            <a (click)="viewImages(1)"onMouseOver="this.style.color='#f36'" onMouseOut="this.style.color='#242e51'" style="cursor:pointer">View images</a>
+            <img (click)="viewImages(1)" class="view-image-icon" src="../../assets/images/camera_icon.png"/>
+ 
+            <ul *ngIf="viewImg[1] && seats.cheaper == 16">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/1-seats.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/2-mercedes_van.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/3-orangeseats.jpg" alt="img"></li>
+              </ul>
+                            <!-- LUXURY -->
+
+              <ul *ngIf="viewImg[1] && seats.cheaper == 24 && coachtext.cheaper =='Luxury Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/34_VIP/3-VIP.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[1] && seats.cheaper == 34 && coachtext.cheaper =='Luxury Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[1] && seats.cheaper == 35 && coachtext.cheaper =='Luxury Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+              </ul>
+              <!-- EXECUITIVE -->
+              <ul *ngIf="viewImg[1] && seats.cheaper == 29 && coachtext.cheaper =='Executive Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/1-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/2-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/3-VIP.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[1] && seats.cheaper == 49  && coachtext.cheaper =='Executive Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/1-Exec.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/2-Exec.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/3-Exec.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[1] && seats.cheaper == 53  && coachtext.cheaper =='Executive Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/1-53-Exec.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/2-53-Exec.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/3-53-Exec.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[1] && seats.cheaper == 71  && coachtext.cheaper =='Executive Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/1-71-Exec.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/2-71-Exec.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/3-71-Exec.jpg" alt="img"></li>
+              </ul>
+             <!-- Standard Coach -->
+             <ul *ngIf="viewImg[1] && seats.cheaper == 29  && coachtext.cheaper =='Standard Coach'">
+              <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/1-VIP.jpg" alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/2-VIP.jpg"  alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/3-VIP.jpg"  alt="img"></li>
+            </ul>
+            <ul *ngIf="viewImg[1] && seats.cheaper == 49  && coachtext.cheaper =='Standard Coach'">
+              <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/1-Standard.jpg" alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/2-Standard.jpg" alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/3-Standard.jpg" alt="img"></li>
+
+            </ul>
+            <ul *ngIf="viewImg[1] && seats.cheaper == 53  && coachtext.cheaper =='Standard Coach'">
+              <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/1-53-Standard.jpg" alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/2-53-Standard.jpg" alt="img"></li>
+              <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/3-53-Standard.jpg" alt="img"></li>
+            </ul>
+              <!-- Double Decker Bus -->
+              <ul *ngIf="viewImg[1] && coachtext.cheaper =='Double Decker Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBusS4W2.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W3.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[1] && coachtext.cheaper =='Vintage Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb2.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/webvintage3.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[1] && coachtext.cheaper =='Single Decker Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/single2web.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+              </ul>
+          </div>
+        </div>
+
+
+        <div [ngClass]="!isIframe ? 'choice_box':'choice_box choice_box_n'" *ngIf="leadDetail.Coachfinder_Upgrade_Lookup__c!=undefined">
+          <div class="choice_box_left">
+            <h2>Upgrade</h2>
+            <div class="bus_icon">
+              <img src="assets/images/bus_icon.png" alt="bus" />
+            </div>
+            <div class="bus_options">
+              <h2>No. of Seats
+                <span class="divider_C"></span><span>{{seats.vip}}</span></h2>
+              <h3>Vehicle Standard<span class="divider_C"></span><span> <a class='danger2' popover="{{getToolTip(coachtext.vip)}}"
+                  popoverPlacement="bottom"
+                  [popoverOnHover]="true"
+                  [popoverCloseOnMouseOutside]="true">?</a>
+<div id="popover_content_wrapper2" style="display: none">
+<div>A vip coach has lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</div>
+</div>{{coachtext.vip}}</span></h3>
+            </div>
+          </div>
+          <div class="choice_box_right">
+            <p class="price-blk">
+              <span class="b-price">£{{leadDetail.Coachfinder_Upgrade_Price__c}}</span> <br>
+
+              <span class="person-price">£{{this.Coachfinder_Upgrade_Price__c}} per person</span><br>
+
+              <a (click)="bookNow(leadDetail.Coachfinder_Upgrade_Lookup__c,1)" class="r-more" style="cursor : pointer" *ngIf="leadDetail.Coachfinder_Upgrade_Price__c >0">SELECT</a>
+              <a (click)="bookNow(leadDetail.Coachfinder_Upgrade_Lookup__c,0)" class="r-more" style="cursor : pointer" *ngIf="leadDetail.Coachfinder_Upgrade_Price__c >0">EMAIL QUOTE</a>
+
+            </p>
+          </div>
+          <div class="step3_imgs" style="display: flex;align-items: center; justify-content: center; flex-wrap: wrap;">
+
+            <a (click)="viewImages(2)" onMouseOver="this.style.color='#f36'" onMouseOut="this.style.color='#242e51'" style="cursor:pointer">View images</a>
+            <img (click)="viewImages(2)" class="view-image-icon" src="../../assets/images/camera_icon.png"/>
+
+            <ul *ngIf="viewImg[2] && seats.vip == 16">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/1-seats.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/2-mercedes_van.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/3-orangeseats.jpg" alt="img"></li>
+              </ul>
+                    <!-- LUXURY -->
+
+                    <ul *ngIf="viewImg[2] && seats.vip == 24 && coachtext.vip =='Luxury Coach'">
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/34_VIP/3-VIP.jpg" alt="img"></li>
+                    </ul>
+                    <ul *ngIf="viewImg[2] && seats.vip == 34 && coachtext.vip =='Luxury Coach'">
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                    </ul>
+                    <ul *ngIf="viewImg[2] && seats.vip == 35 && coachtext.vip =='Luxury Coach'">
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                    </ul>
+                    <!-- EXECUITIVE -->
+                    <ul *ngIf="viewImg[2] && seats.vip == 29 && coachtext.vip =='Executive Coach'">
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/1-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/2-VIP.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/3-VIP.jpg" alt="img"></li>
+                    </ul>
+                    <ul *ngIf="viewImg[2] && seats.vip == 49  && coachtext.vip =='Executive Coach'">
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/1-Exec.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/2-Exec.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/3-Exec.jpg" alt="img"></li>
+                    </ul>
+                    <ul *ngIf="viewImg[2] && seats.vip == 53  && coachtext.vip =='Executive Coach'">
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/1-53-Exec.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/2-53-Exec.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/3-53-Exec.jpg" alt="img"></li>
+                    </ul>
+                    <ul *ngIf="viewImg[2] && seats.vip == 71  && coachtext.vip =='Executive Coach'">
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/1-71-Exec.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/2-71 Exec.jpg" alt="img"></li>
+                      <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/3-71-Exec.jpg" alt="img"></li>
+                    </ul>
+               <!-- Standard Coach -->
+               <ul *ngIf="viewImg[2] && seats.vip == 29  && coachtext.vip =='Standard Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/1-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/2-VIP.jpg"  alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/3-VIP.jpg"  alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[2] && seats.vip == 49  && coachtext.vip =='Standard Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/1-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/2-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/3-Standard.jpg" alt="img"></li>
+
+              </ul>
+              <ul *ngIf="viewImg[2] && seats.vip == 53  && coachtext.vip =='Standard Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/1-53-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/2-53-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/3-53-Standard.jpg" alt="img"></li>
+              </ul>
+               <!-- Double Decker Bus -->
+               <ul *ngIf="viewImg[2] && coachtext.vip =='Double Decker Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBusS4W2.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W3.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[2] && coachtext.vip =='Vintage Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb2.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/webvintage3.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[2] && coachtext.vip =='Single Decker Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/single2web.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+              </ul>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- <h4 *ngIf="!isIframe">Have you thought about changing the coach size?</h4> -->
+      <h4  *ngIf=" vehicle!='Vintage Bus' && vehicle!='Bus'">Have you thought about changing the coach size?</h4>
+      <h4  *ngIf=" vehicle=='Vintage Bus' || vehicle=='Bus'">Have you thought about changing the size?</h4>
+
+      <p>By increasing or decreasing the number of people in your party, you might be able to get better value.
+      </p>
+
+      <div class="coach_size">
+        <div [ngClass]="!isIframe ? 'choice_box':'choice_box choice_box_n'"  *ngIf="leadDetail.Coachfinder_Downsize_Lookup__c!=undefined">
+          <div class="choice_box_left">
+            <h2>Slightly smaller</h2>
+            <div class="bus_options">
+              <span class="divider_C"></span>
+              <h3>Vehicle Standard<span class="divider_C divider_150"></span><span> <a class='danger3' popover="{{getToolTip(coachtext.smaller)}}"
+                  popoverPlacement="bottom"
+                  [popoverOnHover]="true"
+                  [popoverCloseOnMouseOutside]="true">?</a>
+<div id="popover_content_wrapper3" style="display: none">
+<div>A Executive coach has lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</div>
+</div>{{coachtext.smaller}}</span></h3>
+              <h4>No. of Seats<span class="divider_C"></span><span>{{seats.smaller}}</span></h4>
+            </div>
+          </div>
+          <div class="choice_box_right">
+            <p class="price-blk">
+              <span class="b-price">£{{leadDetail.Coachfinder_Downsize_Price__c}}</span> <br>
+
+              <span class="person-price">£{{this.Coachfinder_Downsize_Price__c }} per person</span><br>
+
+              <a (click)="bookNow(leadDetail.Coachfinder_Downsize_Lookup__c,1)" class="r-more" style="cursor : pointer" *ngIf="leadDetail.Coachfinder_Downsize_Price__c">SELECT</a>
+              <a (click)="bookNow(leadDetail.Coachfinder_Downsize_Lookup__c,0)" class="r-more" style="cursor : pointer" *ngIf="leadDetail.Coachfinder_Downsize_Price__c">EMAIL QUOTE</a>
+
+
+            </p>
+          </div>
+          <div class="step3_imgs" style="display: flex;align-items: center; justify-content: center; flex-wrap: wrap;">
+
+            <a (click)="viewImages(3)" onMouseOver="this.style.color='#f36'" onMouseOut="this.style.color='#242e51'"  style="cursor:pointer">View images</a>
+            <img (click)="viewImages(3)" class="view-image-icon" src="../../assets/images/camera_icon.png"/>
+
+            <ul *ngIf="viewImg[3] && seats.smaller == 16">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/1-seats.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/2-mercedes_van.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/3-orangeseats.jpg" alt="img"></li>
+              </ul>
+                  <!-- LUXURY -->
+
+                  <ul *ngIf="viewImg[3] && seats.smaller == 24 && coachtext.smaller =='Luxury Coach'">
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/34_VIP/3-VIP.jpg" alt="img"></li>
+                  </ul>
+                  <ul *ngIf="viewImg[3] && seats.smaller == 34 && coachtext.smaller =='Luxury Coach'">
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                  </ul>
+                  <ul *ngIf="viewImg[3] && seats.smaller == 35 && coachtext.smaller =='Luxury Coach'">
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                  </ul>
+                  <!-- EXECUITIVE -->
+                  <ul *ngIf="viewImg[3] && seats.smaller == 29 && coachtext.smaller =='Executive Coach'">
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/1-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/2-VIP.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/3-VIP.jpg" alt="img"></li>
+                  </ul>
+                  <ul *ngIf="viewImg[3] && seats.smaller == 49  && coachtext.smaller =='Executive Coach'">
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/1-Exec.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/2-Exec.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/3-Exec.jpg" alt="img"></li>
+                  </ul>
+                  <ul *ngIf="viewImg[3] && seats.smaller == 53  && coachtext.smaller =='Executive Coach'">
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/1-53-Exec.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/2-53-Exec.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/3-53-Exec.jpg" alt="img"></li>
+                  </ul>
+                  <ul *ngIf="viewImg[3] && seats.smaller == 71  && coachtext.smaller =='Executive Coach'">
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/1-71-Exec.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/2-71 Exec.jpg" alt="img"></li>
+                    <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/3-71-Exec.jpg" alt="img"></li>
+                  </ul>
+                 <!-- Standard Coach -->
+                <ul *ngIf="viewImg[3] && seats.smaller == 29  && coachtext.smaller =='Standard Coach'">
+
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/2-VIP.jpg"  alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/3-VIP.jpg"  alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[3] && seats.smaller == 49  && coachtext.smaller =='Standard Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/1-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/2-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/3-Standard.jpg" alt="img"></li>
+
+                </ul>
+                <ul *ngIf="viewImg[3] && seats.smaller == 53  && coachtext.smaller =='Standard Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/1-53-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/2-53-Standard.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/3-53-Standard.jpg" alt="img"></li>
+                </ul>
+                 <!-- Double Decker Bus -->
+                 <ul *ngIf="viewImg[3] && coachtext.smaller =='Double Decker Bus'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W1.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBusS4W2.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W3.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[3] && coachtext.smaller =='Vintage Bus'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb1.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb2.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/webvintage3.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[3] && coachtext.smaller =='Single Decker Bus'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/single2web.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+                </ul>
+          </div>
+        </div>
+        <div [ngClass]="!isIframe ? 'choice_box':'choice_box choice_box_n'" *ngIf="leadDetail.Coachfinder_Upsize_Lookup__c!=undefined">
+          <div class="choice_box_left" >
+            <h2>More seats</h2>
+            <div class="bus_options">
+              <span class="divider_C "></span>
+              <h3>Vehicle Standard<span class="divider_C divider_150"></span><span> <a class='danger4' popover="{{getToolTip(coachtext.upsize)}}"
+                  popoverPlacement="bottom"
+                  [popoverOnHover]="true"
+                  [popoverCloseOnMouseOutside]="true">?</a>
+<div id="popover_content_wrapper4" style="display: none">
+<div>A Standard coach has lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</div>
+</div>{{coachtext.upsize}}</span></h3>
+              <h4>No. of Seats<span class="divider_C"></span><span>{{seats.upsize}}</span></h4>
+              <!--<span class="divider_C"></span> </div>-->
+            </div>
+          </div>
+          <div class="choice_box_right">
+            <p class="price-blk">
+              <span class="b-price" >£{{leadDetail.Coachfinder_Upsize_Price__c}}</span> <br>
+              <span class="person-price">£{{ this.Coachfinder_Upsize_Price__c}} per person</span><br>
+
+              <a (click)="bookNow(leadDetail.Coachfinder_Upsize_Lookup__c,1)" class="r-more" style="cursor : pointer" *ngIf="leadDetail.Coachfinder_Upsize_Price__c >0">SELECT</a>
+              <a (click)="bookNow(leadDetail.Coachfinder_Upsize_Lookup__c,0)" class="r-more" style="cursor : pointer" *ngIf="leadDetail.Coachfinder_Upsize_Price__c >0">EMAIL QUOTE</a>
+
+            </p>
+          </div>
+          <div class="step3_imgs" style="display: flex;align-items: center; justify-content: center; flex-wrap: wrap;">
+            <a (click)="viewImages(4)" onMouseOver="this.style.color='#f36'" onMouseOut="this.style.color='#242e51'" style="cursor:pointer">View images</a>
+            <img (click)="viewImages(4)" class="view-image-icon" src="../../assets/images/camera_icon.png"/>
+
+            <ul *ngIf="viewImg[4] && seats.upsize == 16">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/1-seats.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/2-mercedes_van.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/16_seat/3-orangeseats.jpg" alt="img"></li>
+              </ul>
+                <!-- LUXURY -->
+
+                <ul *ngIf="viewImg[4] && seats.upsize == 24 && coachtext.upsize =='Luxury Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/34_VIP/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[4] && seats.upsize == 34 && coachtext.upsize =='Luxury Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[4] && seats.upsize == 35 && coachtext.upsize =='Luxury Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/24_VIP/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <!-- EXECUITIVE -->
+                <ul *ngIf="viewImg[4] && seats.upsize == 29 && coachtext.upsize =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/1-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/2-VIP.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/29_Exec/3-VIP.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[4] && seats.upsize == 49  && coachtext.upsize =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/1-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/2-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/49_Exec/3-Exec.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[4] && seats.upsize == 53  && coachtext.upsize =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/1-53-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/2-53-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/53_Exec/3-53-Exec.jpg" alt="img"></li>
+                </ul>
+                <ul *ngIf="viewImg[4] && seats.upsize == 71  && coachtext.upsize =='Executive Coach'">
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/1-71-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/2-71-Exec.jpg" alt="img"></li>
+                  <li><img src="./assets/images/CF_Step_3_gallery_images/71_Exec/3-71-Exec.jpg" alt="img"></li>
+                </ul>
+              <!-- Standard Coach -->
+              <ul *ngIf="viewImg[4] && seats.upsize == 29  && coachtext.upsize =='Standard Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/1-VIP.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/2-VIP.jpg"  alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/29_Standard/3-VIP.jpg"  alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[4] && seats.upsize == 49  && coachtext.upsize =='Standard Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/1-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/2-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/49_Standard/3-Standard.jpg" alt="img"></li>
+
+              </ul>
+              <ul *ngIf="viewImg[4] && seats.upsize == 53  && coachtext.upsize =='Standard Coach'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/1-53-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/2-53-Standard.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/53_Standard/3-53-Standard.jpg" alt="img"></li>
+              </ul>
+               <!-- Double Decker Bus -->
+               <ul *ngIf="viewImg[4] && coachtext.upsize =='Double Decker Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBusS4W2.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/DoubleDeckerBus-S4W3.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[4] && coachtext.upsize =='Vintage Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/vintageweb2.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/webvintage3.jpg" alt="img"></li>
+              </ul>
+              <ul *ngIf="viewImg[4] && coachtext.upsize =='Single Decker Bus'">
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/single2web.jpg" alt="img"></li>
+                <li><img src="./assets/images/CF_Step_3_gallery_images/bus/singleweb1.jpg" alt="img"></li>
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

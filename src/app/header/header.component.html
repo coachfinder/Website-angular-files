@@ -1,0 +1,284 @@
+<div class="container-fulid header" #chckWidth>
+  <div class="top_bar" data-spy="affix" data-offset-top="10">
+    <div class="container">
+      <div class="col-xs-6">
+        <a class="tel" href="tel:08452579845">0845 257 9845</a>
+      </div>
+      <div class="col-xs-6 top_bar_social">
+        <!-- <ul class="top_links">
+                <li><a (click)="hideModelSec()"routerLink='/login'>Login</a></li><li>
+                  <a (click)="hideModelSec()" routerLink='/register'>Register</a></li>
+            </ul> -->
+        <ul>
+          <li><a (click)=facebookLink() class="icon icon-facebook">Facebook</a></li>
+          <li><a (click)=twitterLink() class="icon icon-twitter">Twitter</a></li>
+          <li><a (click)=instaLink() class="icon icon-instagram">Instagram</a></li>
+        </ul>
+        <a #showQuote  (click)="showModel()" id='quickmobile' class="quick_btn">quick quote</a>
+        <!-- <a #showQuote (click)="showModel()" id="quickmobile" class="quick_btn mobile_only">quick quote</a> -->
+      </div>
+    </div>
+  </div>
+  <div class="container main-hdr">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" data-toggle="collapse"
+            data-target=".navbar-ex1-collapse" aria-controls="collapseExample">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" (click)="hideQuote()" routerLink="/">Coachfinder</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div [ngClass]="isCollapsed ?'navbar-collapse navbar-ex1-collapse collapse in': 'collapse navbar-collapse navbar-ex1-collapse'">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="mobile_links"><a (click)="showQuotes()" routerLink="/">Home</a></li>
+            <li><a (click)="showQuotes()" routerLink="/whyus" routerLinkActive="active">Why us</a></li>
+            <!-- <li  [ngClass]=" serviceList ? 'dropdown open' : 'dropdown'" ><a  (click)="showQuotes()" routerLinkActive="active" (mouseenter)="mouseEnterDestination('service')" (mouseleave)="mouseLeaveDestination()"
+
+               [ngClass]="serviceList ? 'dropdown-toggle disabled' : 'dropdown-toggle'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Services<span class="caret"  (click) ="mobServ()"></span></a>
+              <ul class="dropdown-menu"  (mouseenter)="mouseEnterDestination('service')" (mouseleave)="mouseLeaveDestination()">
+                      <li><a routerLink="services/schoolTrip" >School Trips</a></li>
+                <li><a  routerLink="services/sports">Sports Teams</a></li>
+                <li><a routerLink="services/events">Events and Occasions</a></li>
+                <li><a routerLink="services/overseas">Overseas Trips</a></li>
+              </ul>
+            </li> -->
+
+            <li [ngClass]=" serviceList ? 'dropdown open' : 'dropdown'"><a routerLink="/services"  routerLinkActive="active" (mouseenter)="mouseEnterDestination('service')" (mouseleave)="mouseLeaveDestination()"
+
+              [ngClass]="serviceList ? 'dropdown-toggle disabled' : 'dropdown-toggle'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Services<span class="caret" (click) ="mobServ('service')" ></span></a>
+             <ul class="dropdown-menu"  (mouseenter)="mouseEnterDestination('service')" (mouseleave)="mouseLeaveDestination()">
+                     <li><a routerLink="services/schoolTrip" (click)="showQuotes()" >School Trips</a></li>
+               <li><a (click)="showQuotes()" routerLink="services/sports">Sports Teams</a></li>
+               <li><a (click)="showQuotes()" routerLink="services/events">Events and Occasions</a></li>
+               <li><a (click)="showQuotes()" routerLink="services/overseas">Overseas Trips</a></li>
+             </ul>
+           </li>
+
+            <li [ngClass]=" destinationList ? 'dropdown open' : 'dropdown'"><a  (click)="showQuotes()" routerLink="/destination" routerLinkActive="active" (mouseenter)="mouseEnterDestination('destination')" (mouseleave)="mouseLeaveDestination()" 
+              [ngClass]="destinationList ? 'dropdown-toggle disabled' : 'dropdown-toggle'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Destinations<span class="caret"></span></a>
+              <ul class="dropdown-menu" (mouseenter)="mouseEnterDestination('destination')" (mouseleave)="mouseLeaveDestination()">
+         
+                <li><a [routerLink]="['destination','london',1]">London</a></li>
+                <li><a [routerLink]="['destination','Manchester',2]">Manchester</a></li>
+                <li><a [routerLink]="['destination','Birmingham',4]">Birmingham</a></li>
+                <li><a [routerLink]="['destination','Edinburgh',5]">Edinburgh</a></li>
+                <li><a [routerLink]="['destination','Bristol',6]">Bristol</a></li>
+                <li><a [routerLink]="['destination','Liverpool',7]">Liverpool</a></li>
+                <li><a [routerLink]="['destination','Blackpool',8]">Blackpool</a></li>
+                <li><a [routerLink]="['destination','Glasgow',9]">Glasgow</a></li>
+                <li><a [routerLink]="['destination','Cardiff',10]">Cardiff</a></li>
+                <li><a [routerLink]="['destination','Newcastle',11]">Newcastle</a></li>
+           </ul>
+            </li>
+
+            <li [ngClass]=" attractionList ? 'dropdown open' : 'dropdown'"><a routerLink="/attraction/0"  routerLinkActive="active"  (mouseenter)="mouseEnterDestination('attraction')" (mouseleave)="mouseLeaveDestination()"
+              [ngClass]="destinationList ? 'dropdown-toggle disabled' : 'dropdown-toggle'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Top Attractions<span class="caret" (click) ="mobServ('attraction')"></span></a>
+              <ul class="dropdown-menu" (mouseenter)="mouseEnterDestination('attraction')" (mouseleave)="mouseLeaveDestination()">
+                <li *ngFor="let navigation of pageContent" (click)="showQuotes()"><a (click)="childNavigation(navigation.id)">{{navigation.title}}</a></li>
+
+              </ul>
+            </li>
+            <li><a (click)="showQuotes()" routerLink="/faq" routerLinkActive="active">Faqs</a></li>
+            <li><a routerLink="/contact" (click)="showQuotes()" routerLinkActive="active">Contact us</a></li>
+            <!-- <li class="mobile_links"><a (click)="showQuotes()"routerLink="/login">Login</a></li>
+            <li class="mobile_links"><a (click)="showQuotes()" routerLink="/register">Register</a></li> -->
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<div #showModels class="container-fulid form-block-main">
+  <div class="container top_form">
+    <a (click)="hideModel()" class="close_search"></a>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form_sec" style="padding-bottom:20px">
+      <div class="for-mobile">
+        <h3 class="title-for-mobile">Where are you going to?</h3>
+        <a (click)="gotohome()">Enter Destination</a>
+        <!--<button type="submit" class="btn btn-search">Search</button>-->
+      </div>
+      <div class="for-desktop" id="modal-id">
+        <button type="button" class="close close_search close_btn_m" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+        <h3 class="title-search">Search For quotes</h3>
+        <p><a [ngClass]="withReturn ? 'nav-return active' : 'nav-return'" (click)="PassengerBookingType('return')">Return</a>
+          <a [ngClass]="!withReturn ? 'nav-return active' : 'nav-return'" (click)="PassengerBookingType('oneway')">One-way</a>   
+          <a [ngClass]="vehicleToStay ? 'nav-return active' : 'nav-return last_btn'" (click)="needVehicle()" style="cursor : pointer">VehicleToStay</a> 
+
+               </p>
+
+        <div class="firstDiv" #firstDiv>
+          <form (keydown.enter)="$event.preventDefault()" [formGroup]="bookingForm" (ngSubmit)="openModal('return')">
+            <div class="form-group full">
+              <label>Where are you traveling from?</label>
+              <div class="form-fields">
+                <input class="form-control loc" id="text1" placeholder="Location" type="text" tabindex="1" autocorrect="off" autocapitalize="off"
+                  spellcheck="off" #location formControlName="sourceControl">
+                <span class="error_msg" *ngIf="!bookingForm.controls['sourceControl'].valid && bookingForm.controls['sourceControl'].touched">Please complete location.</span>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label>Where are you going to?</label>
+              <div class="form-fields">
+                <input class="form-control loc" id="text2" placeholder="Destination" type="text" autocorrect="off" autocapitalize="off" spellcheck="off"
+                  #destination formControlName="destinationControl">
+                <span class="error_msg" *ngIf="!bookingForm.controls['destinationControl'].valid && bookingForm.controls['destinationControl'].touched">Please complete location.</span>
+              </div>
+            </div>
+            <div class="form-group small">
+              <label>Passengers</label>
+              <div class="form-fields">
+                <input class="form-control pass" id="text3" placeholder="Passengers" type="text" #passenger formControlName="passengerControl">
+                <span class="error_msg" *ngIf="!bookingForm.controls['passengerControl'].valid && bookingForm.controls['passengerControl'].touched">Please enter total passenger.</span>
+                <control-messages [control]="bookingForm.controls.passengerControl"></control-messages>
+              </div>
+            </div>
+            <div class="form-group small last">
+              <label>Vehicle Standard</label>
+              <div class="form-fields">
+                <select class="form-control veh" id="text4" placeholder="Please Select" type="text" formControlName="vehicleStandradControl">
+                    <option value="null" disabled="true" [selected]="true">Please Select</option>
+    
+                      <option *ngFor="let Vehicle of VehicleStandard" value="{{Vehicle.name}}">{{Vehicle.name}}</option>
+    
+                    </select>
+                <span class="error_msg" *ngIf="!bookingForm.controls['vehicleStandradControl'].valid && bookingForm.controls['vehicleStandradControl'].touched">What vehicle Standard?</span>
+              </div>
+            </div>
+            <div class="form-group date" [ngClass]="withReturn ? '' : 's-small'">
+              <label>Dates</label>
+              <div class="form-fields">
+                <input class="form-control date-f" id="text5" placeholder="Departure" type="text" formControlName="pickDateControl" [displayMonths]="displayMonths"
+                  [navigation]="navigation" [minDate]="minDate" (ngModelChange)="getDepDate($event)" [showWeekNumbers]="showWeekNumberss"
+                  ngbDatepicker #n="ngbDatepicker" (click)="toggle(n.toggle(),g.close())">
+                <span class="error_msg" *ngIf="!bookingForm.controls['pickDateControl'].valid && bookingForm.controls['pickDateControl'].touched">Pick up date required.</span>
+
+              </div>
+              <div class="form-fields i-return" [ngClass]="withReturn ? '' : 'hidden'">
+                <input [title]="is_edit ? 'Please select departure':''" class="form-control date-f" id="text6" placeholder="Return" type="text"
+                  formControlName="returnDateControl" [disabled]="is_edit" [minDate]="minDateSec" [displayMonths]="displayMonths"
+                  [navigation]="navigation" [showWeekNumbers]="showWeekNumbers" ngbDatepicker #g="ngbDatepicker" (click)="toggleSec(g.toggle(),n.close())">
+                <span class="error_msg" *ngIf="!bookingForm.controls['returnDateControl'].valid && bookingForm.controls['returnDateControl'].touched ">Return date required / date not valid.</span>
+              </div>
+            </div>
+            <div class="form-group date no-mrg-r" [ngClass]="withReturn ? '' : 's-small'">
+              <label>Times</label>
+              <div class="form-fields">
+                <select class="form-control time" id="text7" formControlName="departureTimeControl">
+                    <option value="null" disabled="true" [selected]="true">Departure</option>
+                    <option *ngFor="let DepTime of time" value="{{DepTime.time}}" >{{DepTime.time}}</option>
+  
+                    </select>
+                <span class="error_msg" *ngIf="!bookingForm.controls['departureTimeControl'].valid && bookingForm.controls['departureTimeControl'].touched">Departure time required.</span>
+              </div>
+              <div class="form-fields i-return" [ngClass]="withReturn ? '' : 'hidden'">
+                <select class="form-control time " id="text8" placeholder="Return" type="text" formControlName="returnTimeControl">
+                    <option value="null" disabled="true" [selected]="true">Return</option>
+
+                 <option *ngFor="let DepTime of time" value="{{DepTime.time}}">{{DepTime.time}}</option>
+                </select>
+                <span class="error_msg" *ngIf="!bookingForm.controls['returnTimeControl'].valid && bookingForm.controls['returnTimeControl'].touched">Return time required.</span>
+              </div>
+            </div>
+
+            <!-- <div class="form-group calling_point small">
+                <a href="#" class="btn btn-add-cpoint">Add calling point</a>
+              </div> -->
+            <div class="form-group search_btn small last">
+              <button type="submit" class="btn btn-search" [disabled]="!bookingForm.valid">Search</button>
+            </div>
+          </form>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div *ngIf="modal" class=" modal form_model fade in" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:block ;overflow-y: scroll;position:absolute">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <button (click)="closeModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3>Please Complete your details</h3>
+        <p>Our service is 100% free to use, we collate your information so we can contact you with the best price.</p>
+        <div class="form_sec">
+          <form  (keydown.enter)="$event.preventDefault()" [formGroup]="rform" (ngSubmit)="addPost()">
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control name" id="text11" placeholder="Firstname" type="text" formControlName="firstName">
+                <control-messages [control]="rform.controls.firstName"></control-messages>
+              </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control name" id="text12" placeholder="Lastname" type="text" formControlName="lastName">
+                <control-messages [control]="rform.controls.lastName"></control-messages>
+              </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control phone" id="text13" placeholder="Phone number" type="text" formControlName="phoneNumber">
+
+                <control-messages [control]="rform.controls.phoneNumber"></control-messages>
+              </div>
+            </div>
+            <div class="form-group full">
+              <div class="form-fields">
+                <input class="form-control msg" id="text14" placeholder="Email" type="email" formControlName="email">
+                <control-messages [control]="rform.controls.email"></control-messages>
+              </div>
+            </div>
+            <div class="form-group full">
+                <div class="form-fields">
+                <input class="form-control " id="text14" placeholder="Voucher Code" formControlName="voucher">
+                     <!-- <span class="error_msg">Please complete destination</span> -->
+                </div>
+              </div>
+              <div class="form-group full">
+                  <div class="form-groupb form-groupchk">
+                    <label class="control_c control-checkbox">
+                      <input type="checkbox"  [checked]="gdrp" (change)="gdrp = !gdrp" formControlName="HasOptedOutOfEmail"/>
+                      <span class="control_label">I would not like to receive emails from Coachfinder containing exciting news, offers and discounts.</span> <span class="control_indicator_c"></span> </label>
+                  </div>
+                </div>
+                <div>
+                  <label style="font-size: 12px;
+                  color: #fff;
+                  font-weight: 700;">
+                    <span class="control_label">You can unsubscribe from receiving these emails at any time by clicking the unsubscribe link at the bottom of our emails.</span></label>
+                </div>
+
+            <div class="form-group full">
+              <div class="form-fields">
+                <button type="submit" class="btn btn-search" [disabled]="!rform.valid">show me the quotes</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	

@@ -1,0 +1,108 @@
+<div class="container-fulid section-cta">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title">{{pageContent.title}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- #elem [attr.id]="content.id" -->
+
+<div *ngFor="let content of pageContent.section;let i=index" #2>
+  <div [ngClass]="sectionClick[i] ? 'container-fulid section-value ThorpePark without_after':'container-fulid section-value ThorpePark'"
+    *ngIf="i%2==0" #elem [attr.id]="content.id" [ngStyle]="{'background-color': content.color_code}">
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row safe-reliable-text">
+          <div class="section-booking_text">
+            <h2 class="title-sub text-left">{{content.title}}</h2>
+            <p class="text-left" [innerHTML]="content.description"></p>
+          </div>
+
+          <div class="section-booking_img text-center"> <span class="for_mobile_only"><i id="check1"></i></span><img src={{content.file}} class="img-reliable img-responsive"
+              alt=""> </div>
+        </div>
+        <div class="learn_more_btn row row" id="thor_more" *ngIf="!sectionClick[i]"> <a (click)="checkPlans(i)">Learn more</a> </div>
+      </div>
+    </div>
+    <div class="attrcat_more" style="display: block;" id="thor_sec" *ngIf="sectionClick[i]">
+      <div class="container">
+        <h2>{{pageContent.dis_title}}</h2>
+        <h3>{{pageContent.dis_subtitle}}</h3>
+        <h5>Tickets and Travel</h5>
+        <div class="row reliable-text">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="content.option_1_price != '0'">
+            <h2>{{content.option_1_title}}</h2>
+            <span>£{{content.option_1_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_1_button}}</a>            </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="content.option_2_price != '0'">
+            <h2>{{content.option_2_title}}</h2>
+            <span>£{{content.option_2_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_2_button}}</a>            </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="content.option_3_price != '0'">
+            <h2>{{content.option_3_title}}</h2>
+            <span>£{{content.option_3_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_3_button}}</a>            </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="content.option_4_price != '0'">
+            <h2>{{content.option_4_title}}</h2>
+            <span>£{{content.option_4_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_4_button}}</a>            </div>
+        </div>
+        <p>{{pageContent.dis_details}}</p>
+      </div>
+      <a (click)="checkPlans(i)" class="close_btn" id="thor_close" *ngIf="sectionClick[i]">Close</a> </div>
+  </div>
+
+
+
+  <div [ngClass]="sectionClick[i] ? 'container-fulid section-booking ':'container-fulid section-booking'" *ngIf="i%2!=0"
+    #elem [attr.id]="content.id" [ngStyle]="{'background-color': content.color_code}">
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row safe-reliable-text">
+          <div class="section-booking_img text-center"> <img src={{content.file}} id="check2" class="img-reliable img-responsive" alt=""> </div>
+          <div class="section-booking_text">
+            <h2 class="title-sub text-left">{{content.title}} </h2>
+            <p class="text-left" [innerHTML]="content.description"></p>
+          </div>
+        </div>
+        <div class="learn_more_btn row" id="thor_more1" *ngIf="!sectionClick[i]"> <a (click)="checkPlans(i)">Learn more</a> </div>
+      </div>
+    </div>
+    <div class="attrcat_more attrcat2" style="display: block;" id="thor_sec1" *ngIf="sectionClick[i]">
+      <div class="container">
+        <h2>{{pageContent.dis_title}}</h2>
+        <h3>{{pageContent.dis_subtitle}}</h3>
+        <h5>Tickets and Travel</h5>
+        <div class="row reliable-text">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="content.option_1_price != '0'">
+            <h2>{{content.option_1_title}}</h2>
+            <span>£{{content.option_1_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_1_button}}</a></div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec" *ngIf="content.option_2_price != '0'">
+            <h2>{{content.option_2_title}}</h2>
+            <span>£{{content.option_2_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_2_button}}</a></div>
+          <div  class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="content.option_3_price != '0'">
+            <h2>{{content.option_3_title}}</h2>
+            <span>£{{content.option_3_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_3_button}}</a></div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text_sec wihtout_border" *ngIf="content.option_4_price != '0'">
+            <h2>{{content.option_4_title}}</h2>
+            <span>£{{content.option_4_price}}pp</span> <a (click)="navigateToHome(content.address)" class="r-more">{{content.option_4_button}}</a> </div>
+        </div>
+        <p>{{pageContent.dis_details}}</p>
+      </div>
+      <a (click)="checkPlans(i)" class="close_btn" id="thor_close1" *ngIf="sectionClick[i]">Close</a>
+     </div>
+  </div>
+</div>
+<div class="container-fulid section-booking section-last">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row safe-reliable-text_b">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-why-bottom text-center" style="border-right : 0px;">
+          <h3 class="title-sub text-left">Find out about our services </h3>
+          <a routerLink="/services" class="r-more">more</a> </div>
+        <!--<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-why-bottom text-center">
+          <h3 class="title-sub text-left">Find out about destinations</h3>
+          <a class="r-more">more</a> </div>-->
+      </div>
+    </div>
+  </div>
+</div>

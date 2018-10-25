@@ -1,0 +1,316 @@
+<div #chckWidth ></div>
+<div *ngIf="destination" >
+<div class="container-fulid section-cta">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title">{{pageContent.title}}</h2>
+      </div>
+    </div>
+    <div class="col-xs-12 cta-boxes">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <p>{{pageContent.left_desc}}</p>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <p>{{pageContent.right_desc}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fulid prices-sec">
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title">prices based on coach standard</h2>
+        <!-- <ul id="menu"> -->
+         
+          <!-- coach type and seats details -->
+        <ul id="menu">
+       <li class="current_page_item" *ngFor="let coachs of pageContent.coachs; let i = index" id= {{coachs.name+i}} style="cursor: pointer;">
+            <a (mouseenter) ="mouseEnterList(i,coachs.name+i)" *ngIf="coachs.seats!='35 SEAT'" (mouseleave) ="mouseLeave()" id="couch_1">{{coachs.seats}} <br><span>{{coachs.name}}</span></a></li>
+        <!-- <li class="magic-line" id = "magic-line1"  style="margin-left: 0px"></li>  -->
+       
+        <input type="range"  value="{{sliderValue}}"  class="slider" id="myRange"  #slide (mouseup)="mouseups()" (mousedown)="mousedowns()">
+      </ul>
+     
+         <div id="gutter">
+<span id="highlight"></span>
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fulid prices-table" >
+  <div class="container">
+    <div class="col-xs-12">
+      <div class="row">
+        <h2 class="cta-title">*Prices shown below are a guide from price only. See terms and conditions for details.</h2>
+        
+        <h2 class="cta-title travel_title" style="text-transform:capitalize" >Travel From</h2>
+        <div class="col-xs-2 tablelist">
+             <!-- row destination address -->
+        <ul>
+          <li><a >London</a></li>
+          <li><a >Manchester</a></li>
+          <li><a >Birmingham</a></li>
+          <li><a >Edinburgh</a></li>
+          <li><a >Bristol</a></li>
+          <li><a >Liverpool</a></li>
+          <li><a >Blackpool</a></li>
+          <li><a >Glasgow</a></li>
+          <li><a >Cardiff</a></li>
+          <li><a >Newcastle</a></li>
+          
+        
+        </ul>
+      </div>
+     
+        <div class="col-xs-10 tablemain">
+          <!-- column destination address -->
+          <ul class="top">
+          <li><a id="1" >London</a></li>
+          <li><a id="2" >Manchester</a></li>
+          <li><a id="3" >Birmingham</a></li>
+          <li><a id="4" >Edinburgh</a></li>
+          <li><a id="5" >Bristol	</a></li>
+          <li><a id="6" >Liverpool</a></li>
+          <li><a id="7" >Blackpool</a></li>
+          <li><a id="8" >Glasgow</a></li>
+          <li><a id="9" >Cardiff</a></li>
+          <li><a id="10" >Newcastle</a></li>
+          <form [formGroup]="sform"> 
+          <select class="classic" (change)="selectCity($event)" formControlName="select">
+            <option  value="null" disabled="true" [selected]="true" >Please Select</option>
+            <option *ngFor="let city of cities;let i = index;" value="{{city}}">{{city}}</option>
+            </select>
+          </form>
+        </ul>
+    <!-- table starts here -->
+    <div *ngIf="visible ;then firstTemplate else secondTemplate "> </div>
+    
+    <ng-template #firstTemplate>
+        <div class="outer_city" id="idd{{city}}" *ngFor="let city of cities;let i = index;" >   
+            <ul class="couch_type">
+            
+                <li  *ngFor="let coachs of pageContent.coachs; let i = index">
+                  <a *ngIf="coachs.seats!='35 SEAT'">{{coachs.seats}}  <br><span>{{coachs.name}}</span></a></li>
+            </ul>
+            <ul>
+                <li class="readmore_btn" ><a style="cursor:pointer" (click)="navigateToCity(city)" [popover]="myPopo" [popoverOnHover]="true" class="r-more readmore"  data-placement="bottom" data-toggle="popover" data-container="body" data-placement="left" type="button" data-html="true">learn more</a>
+                  <popover-content #myPopo [closeOnClickOutside]="true"  [animation]="true" >
+                      <img src={{price_table[city.toLowerCase()][i].file}} alt={{price_table[city.toLowerCase()][i].city_from}}  >
+                  <p>{{price_table[city.toLowerCase()][i].description |   slice:0:158}} ...</p>
+                </popover-content>
+                  </li>
+                <!-- <div class="label_text" *ngIf="price_table[city.toLowerCase()][0].city_to!=price_table[city.toLowerCase()][0].city_from">{{price_table[city.toLowerCase()][0].city_to}} to {{price_table[city.toLowerCase()][0].city_from}}</div> -->
+                <li [ngClass]="price.city_to == price.city_from ? 'blank' : 'a1'" *ngFor="let price of price_table[city.toLowerCase()]">
+                    <span *ngIf="price.city_to == price.city_from">...</span>
+                    <a style="cursor:pointer" *ngIf="price.city_to!=price.city_from" (click)="getForm(price.city_from,price.city_to,price.leave_time,price.return_time)" data-toggle="modal" data-target="#exampleModal">
+                      <label *ngIf="hoverCoach=='mini'" style="font-size:21px;font-weight: 800;">&#163;{{price.sixt_mini_pp}}pp</label>
+                      <span *ngIf="hoverCoach=='mini'">&#163;{{price.sixt_mini_full}}</span>
+                      <label *ngIf="hoverCoach=='standard'" style="font-size:21px;font-weight: 800;">&#163;{{price.fe_standard_pp}}pp</label>
+                      <span *ngIf="hoverCoach=='standard'">&#163;{{price.fe_standard_full}}</span>
+                      <label *ngIf="hoverCoach=='executive48'" style="font-size:21px;font-weight: 800;">&#163;{{price.fe_executive_pp}}pp</label>
+                      <span *ngIf="hoverCoach=='executive48'">&#163;{{price.fe_executive_full}}</span>
+                      <label *ngIf="hoverCoach=='executive74'" style="font-size:21px;font-weight: 800;">&#163;{{price.sf_executive_pp}}pp</label>
+                      <span *ngIf="hoverCoach=='executive74'">&#163;{{price.sf_executive_full}}</span>
+                      <!-- <label *ngIf="hoverCoach=='vip24'" style="font-size:21px;font-weight: 800;">&#163;{{price.twentyf_vip_full}}</label>
+                      <span *ngIf="hoverCoach=='vip24'">&#163;{{price.twentyf_vip_pp}}pp</span> -->
+                      <label *ngIf="hoverCoach=='vip35'" style="font-size:21px;font-weight: 800;">&#163;{{price.thirtyf_vip_pp}}pp</label>
+                      <span *ngIf="hoverCoach=='vip35'">&#163;{{price.thirtyf_vip_full}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+      </ng-template>
+      <!-- for mobile -->
+
+        <ng-template #secondTemplate>
+
+            <div class="outer_city" id="idd{{city}}" *ngFor="let city of cities;let i = index;" >   
+                <ul class="couch_type">
+                    <li  *ngFor="let coachs of pageContent.coachs; let i = index"><a *ngIf="coachs.seats!='35 SEAT'" >{{coachs.seats}}  <br>
+                      <span>{{coachs.name}}</span></a></li>
+                </ul>
+                <ul>
+                   
+                      <div  *ngFor="let price of price_table[selectedCity];let i = index">
+                          <li class="readmore_btn" ><a  (click)="navigateToCity(city)" style="cursor:pointer" [popover]="myPopo" [popoverOnHover]="true" class="r-more readmore"  data-placement="bottom" data-toggle="popover" data-container="body" data-placement="left" type="button" data-html="true" >learn more</a>
+                            <popover-content #myPopo   [closeOnClickOutside]="true"  [animation]="true">
+                                <img src="{{price.file}}" alt={{price_table[city.toLowerCase()][i].city_from}} >
+                            <p>{{price.description |   slice:0:158}} ...</p>
+                          </popover-content>
+                            </li>
+                    <div class="label_text" *ngIf="price.city_from!=price.city_to">{{price.city_from}} to {{price.city_to}}</div>
+                    <li [ngClass]="price.city_to == price.city_from ? 'blank' : 'a1'"  style="cursor:pointer">
+                        <a *ngIf="price.city_to!=price.city_from" (click)="getForm(price.city_to,price.city_from,price,price.leave_time,price.return_time)" data-toggle="modal" data-target="#exampleModal">
+                          <label  style="font-size:21px;font-weight: 800;">&#163;{{price.sixt_mini_pp}}pp</label>
+                          <span >&#163;{{price.sixt_mini_full}}</span>
+                  
+                        </a>
+                    </li>
+                    <li [ngClass]="price.city_to == price.city_from ? 'blank' : 'a2'"  style="cursor:pointer">
+                        <a *ngIf="price.city_to!=price.city_from" (click)="getForm(price.city_to,price.city_from,price.leave_time,price.return_time)" data-toggle="modal" data-target="#exampleModal">
+                        
+                          <label  style="font-size:21px;font-weight: 800;">&#163;{{price.fe_standard_pp}}pp</label>
+                          <span >&#163;{{price.fe_standard_full}}</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="price.city_to == price.city_from ? 'blank' : 'a3'"  style="cursor:pointer">
+                        <a *ngIf="price.city_to!=price.city_from" (click)="getForm(price.city_to,price.city_from,price.leave_time,price.return_time)" data-toggle="modal" data-target="#exampleModal">
+                        
+                          <label  style="font-size:21px;font-weight: 800;">&#163;{{price.fe_executive_pp}}pp</label>
+                          <span >&#163;{{price.fe_executive_full}}</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="price.city_to == price.city_from ? 'blank' : 'a4'"  style="cursor:pointer">
+                        <a *ngIf="price.city_to!=price.city_from" (click)="getForm(price.city_to,price.city_from,price.leave_time,price.return_time)" data-toggle="modal" data-target="#exampleModal">
+                        
+                          <label  style="font-size:21px;font-weight: 800;">&#163;{{price.sf_executive_pp}}pp</label>
+                          <span >&#163;{{price.sf_executive_full}}</span>
+                        </a>
+                    </li>
+                    <!-- <li [ngClass]="price.city_to == price.city_from ? 'blank' : 'a5'"  style="cursor:pointer">
+                        <a *ngIf="price.city_to!=price.city_from" (click)="getForm(price.city_to,price.city_from,price.leave_time,price.return_time)" data-toggle="modal" data-target="#exampleModal">
+                        
+                          <label  style="font-size:21px;font-weight: 800;">&#163;{{price.twentyf_vip_full}}</label>
+                          <span >&#163;{{price.twentyf_vip_pp}}pp</span>
+                        </a>
+                    </li> -->
+                    <li [ngClass]="price.city_to == price.city_from ? 'blank' : 'a6'"  style="cursor:pointer">
+                        <a *ngIf="price.city_to!=price.city_from" (click)="getForm(price.city_to,price.city_from,price.leave_time,price.return_time)" data-toggle="modal" data-target="#exampleModal">
+                        
+                          <label  style="font-size:21px;font-weight: 800;">&#163;{{price.thirtyf_vip_pp}}pp</label>
+                          <span >&#163;{{price.thirtyf_vip_full}}</span>
+                        </a>
+                    </li>
+                    
+                    </div>
+                </ul>
+            </div>
+        </ng-template>
+
+    
+     
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fulid section-booking section-last">
+  <div class="container">
+    <div class="col-xs-10 col-xs-offset-2">
+      <div class="row safe-reliable-text">
+        <div class="col-why-bottom text-center">
+          <h3 class="title-sub text-left">Find out about our services </h3>
+          <a routerLink="/services" class="r-more">more</a>
+        </div>
+        <div class="col-why-bottom text-center">
+          <h3 class="title-sub text-left">Find our about our top attractions</h3>
+          <a routerLink="/attraction/0" class="r-more" >more</a>
+        </div></div>
+      </div>
+      <div class="container">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 calculated_desc">
+          <p><strong>{{pageContent.disclamer[0].title}}</strong></p>
+          <p>{{pageContent.disclamer[0].description}}</p>
+        </div>
+        </div>
+  </div>
+</div>
+</div>
+<router-outlet ></router-outlet>
+
+<!-- Modal -->
+<div *ngIf="completeDetail" class="modal form_model fade in" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:block;overflow-y: scroll;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <button type="button" (click)="closeForm()" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          <h3>Please complete your details</h3>
+          <p>Our service is 100% free to use, we collate your information so we can contact you with the best price.</p>
+          <div class="form_sec">
+          <form [formGroup]="rform" (ngSubmit)="addPost(rform.value)"> 
+          <div class="form-group full">
+              <div class="form-fields">
+              <input class="form-control name" id="text11" placeholder="Firstname" type="text" formControlName="firstName">
+              <control-message [control]="rform.controls.firstName" style="top:10px !important"></control-message>
+            </div>
+          </div>
+          <div class="form-group full">
+            <div class="form-fields">
+            <input class="form-control name" id="text12" placeholder="Lastname" type="text" formControlName="lastName">
+            <control-message [control]="rform.controls.lastName"></control-message>
+          </div>
+          </div>
+          <div class="form-group full">
+              <div class="form-fields">
+              <input class="form-control phone" id="text13" placeholder="Phone number" type="text" formControlName="phoneNumber">
+              <control-message [control]="rform.controls.phoneNumber"></control-message>
+
+            </div>
+          </div>
+          <div class="form-group full">
+            <div class="form-fields">
+            <input class="form-control msg" id="text14" placeholder="Email" type="email" formControlName="email">
+            <control-message [control]="rform.controls.email"></control-message>            </div>
+          </div>
+          <div class="form-group full">
+              <div class="form-fields">
+              <input class="form-control " id="text14" placeholder="Voucher Code" formControlName="voucher">
+                   <!-- <span class="error_msg">Please complete destination</span> -->
+              </div>
+            </div>
+          <div class="form-group full">
+            <label>Dates</label>
+            <div class="form-fields small_L">
+            <input class="form-control date-f" id="text15" placeholder="Departure" type="text" formControlName="departureDate" (ngModelChange)="getDepDate($event)"
+            [displayMonths]="displayMonths" [minDate]="minDate"  [navigation]="navigation" [showWeekNumbers]="showWeekNumbers" ngbDatepicker #d="ngbDatepicker" (click)="toggle(d.toggle(),r.close())">
+            <control-message [control]="rform.controls.departureDate"></control-message>
+
+      
+            </div>
+            <div class="form-fields small_R">
+            <input class="form-control date-f" id="text16" placeholder="Return" type="text" formControlName="returnDate"
+            [displayMonths]="displayMonths" [minDate]="minDateSec"  [disabled]="is_edit" [navigation]="navigation" [showWeekNumbers]="showWeekNumbers" ngbDatepicker #r="ngbDatepicker" (click)="toggle(r.toggle(),d.close())">
+            <!-- <control-message [control]="rform.controls.returnDate"></control-message> -->
+            <span class="error_msg error_sp" *ngIf="!rform.controls['returnDate'].valid && rform.controls['returnDate'].touched">Invalid date.</span>
+
+            </div>
+          </div>
+         
+          <div class="form-group  full pessanger-group">
+            <div class="form-fields">
+                <label>Passengers</label>
+              <input class="form-control pass" id="text15" placeholder="Passengers" type="text" formControlName="passengers">
+              <span class="error_msg" *ngIf="!rform.controls['passengers'].valid && rform.controls['passengers'].touched">Please enter passengers.</span>
+              </div>
+            </div>
+            <div class="form-group full">
+                <div class="form-groupb form-groupchk">
+                  <label class="control_c control-checkbox">
+                    <input type="checkbox"  [checked]="gdrp" (change)="gdrp = !gdrp" formControlName="HasOptedOutOfEmail"/>
+                    <span class="control_label">I would not like to receive emails from Coachfinder containing exciting news, offers and discounts.</span> <span class="control_indicator_c"></span> </label>
+                </div>
+              </div>
+              <div>
+                <label style="font-size: 12px;
+                color: #fff;
+                font-weight: 700;">
+                  <span class="control_label">You can unsubscribe from receiving these emails at any time by clicking the unsubscribe link at the bottom of our emails.</span></label>
+              </div>
+          <div class="form-group full">
+            <div class="form-fields">
+            <button type="submit" class="btn btn-search"  [disabled]="!rform.valid" >show me the quotes</button>
+            </div>
+          </div>
+          </form>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+

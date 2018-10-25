@@ -1,0 +1,65 @@
+<div *ngIf="varr">
+  <div class="container-fulid section-cta">
+    <div class="container">
+      <div class="col-xs-12">
+        <div class="row">
+          <h2 class="cta-title">{{pageContent.title}}</h2>
+        </div>
+      </div>
+      <div class="col-xs-12 cta-boxes">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <p [innerHTML]="pageContent.left_desc"></p>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <p [innerHTML]="pageContent.right_desc"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let section of pageContent.services ;let i=index">
+    <div class="container-fulid section-value" *ngIf="i%2==0" [ngStyle]="{'background-color': section.color_code}">
+      <div class="container">
+        <div class="col-xs-12">
+          <div class="row safe-reliable-text">
+            <div class="col-xs-12 col-sm-5 col-sm-offset-1 col-md-5 col-md-offset-1  col-lg-5 col-lg-offset-1 ">
+              <div class="bg_icons">
+                <img src={{section.file}} class="img-reliable" alt="">
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sevice_text">
+              <h2 class="title-sub text-left">{{section.title}}</h2>
+              <p class="text-left">{{section.description}}</p>
+              <a (click)="ActiveLink(i)" class="r-more">{{section.button_text}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fulid section-booking section-fleet" *ngIf="i%2!==0" [ngStyle]="{'background-color': section.color_code}">
+      <div class="container">
+        <div class="col-xs-12">
+          <div class="row safe-reliable-text">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sevice_text">
+              <h2 class="title-sub text-left">{{section.title}}</h2>
+              <p class="text-left">{{section.description}} </p>
+              <a (click)="ActiveLink(i)" class="r-more">{{section.button_text}}</a>
+            </div>
+            <div class="col-xs-12 col-sm-5 col-sm-offset-1 col-md-5 col-md-offset-1  col-lg-5 col-lg-offset-1 ">
+              <div class="bg_icons">
+                <img src={{section.file}} class="img-reliable" alt="">
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<router-outlet></router-outlet>
